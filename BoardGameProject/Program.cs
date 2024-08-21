@@ -1,2 +1,13 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World222233!");
+namespace BoardGameProject
+{
+    class BoardGameProject
+    {
+        public static void Main(string[] args)
+        {
+            GameManager gm = GameManager.Instance;
+            gm.RunApp();          
+        }
+       
+    }
+
+}
