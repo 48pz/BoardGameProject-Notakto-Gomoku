@@ -1,3 +1,3 @@
-gametype: Notakto 1  Gomuku 2    quit quit
-
-test github
+﻿gametype: Notakto 1  Gomuku 2    quit quit
+gamemode: comVShuman 2  humanVShuman 1  quit quit
+default chess symbol: Notakto: all players use X; Gomuku : first player use X, another player use ⚪

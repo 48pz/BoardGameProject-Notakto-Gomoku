@@ -38,6 +38,8 @@ namespace BoardGameProject
         }
 
         public abstract void DisplayGameMode();
+        public abstract string PassInfoToGameManager();
+       
 
     }
 

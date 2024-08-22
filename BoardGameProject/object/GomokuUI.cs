@@ -8,5 +8,12 @@ namespace BoardGameProject
         {
             UIUtils.DisplayGameMode();
         }
+
+        public override string PassInfoToGameManager()
+        {
+            throw new NotImplementedException();
+        }
+
+        
     }
 }
