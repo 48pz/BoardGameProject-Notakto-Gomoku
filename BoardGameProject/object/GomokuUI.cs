@@ -14,6 +14,12 @@ namespace BoardGameProject
             throw new NotImplementedException();
         }
 
-        
+
+        public override void DisplayInfo(string info)
+        {
+            Console.WriteLine(info);
+        }
+
+
     }
 }

@@ -39,7 +39,7 @@ namespace BoardGameProject
 
         public abstract void DisplayGameMode();
         public abstract string PassInfoToGameManager();
-       
+        public abstract void DisplayInfo(string info);
 
     }
 

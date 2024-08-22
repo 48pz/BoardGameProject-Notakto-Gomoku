@@ -9,20 +9,23 @@
         public void play()
         {
             bool isGameOver = false;
+            int currentPlayer = 1;
             SetUp();//it should include reloading game.
 
-            //while (!isGameOver)
-            //{
-                SelectPosition();
-                //CheckPositionValid();
-
-            //}
-            //End();
+            while (!isGameOver)
+            {
+                SelectPosition(currentPlayer);
+                CheckPositionValid(currentPlayer);
+                currentPlayer =  currentPlayer == 1 ? 2 : 1;//switch player
+            }
+            End();
         }
 
+
+       
         public abstract void SetUp();
-        public abstract void SelectPosition();
-        public abstract void CheckPositionValid();
+        public abstract void SelectPosition(int  player);
+        public abstract void CheckPositionValid(int player);
         public abstract void End();
     }
 }

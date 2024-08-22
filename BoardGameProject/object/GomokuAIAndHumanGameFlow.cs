@@ -4,6 +4,8 @@
     {
         private string gameType;
         private string gameMode;
+        private UIBase ui;
+
         public string GameType
         {
             get { return gameType; }
@@ -15,16 +17,24 @@
             get { return gameMode; }
             set { gameMode = value; }
         }
+        public UIBase UI
+        {
+            get { return ui; }
+            set { ui = value; }
+        }
 
-        public GomokuAIAndHumanGameFlow(string aGameType, string aGameMode)
+        public GomokuAIAndHumanGameFlow(string aGameType, string aGameMode, UIBase aUi)
         {
             gameMode = aGameMode;
-            gameType = aGameType;   
+            gameType = aGameType;
+            ui = aUi;   
         }
 
         private PlayerBase player1;
         private PlayerBase player2;
-        public IBoard gomokuBoard;
+        public GomokuBoard gomokuBoard;
+        private GomokuChecker checker;
+
 
         public override void SetUp()
         {
@@ -36,23 +46,37 @@
 
         }
 
-        public override void CheckPositionValid()
-        {
-
-        }
-
         public override void End()
         {
             throw new NotImplementedException();
         }
 
-        public override void SelectPosition()
+        public override void SelectPosition(int player)
         {
+            var pos = player1.GetPosition(gomokuBoard);
+            bool isValid = checker.IsValidPlace(gomokuBoard, pos.Item1, pos.Item2);
+            if (isValid)//input valid
+            {
+                if (checker.IsDraw(gomokuBoard))
+                {
+                    gomokuBoard.PrintBoard();
+                    ui.DisplayInfo("Game End: Draw!");
+                }else if (checker.IsWin(gomokuBoard, pos.Item1,pos.Item2, player)){
+                    gomokuBoard.PrintBoard();
+                    Console.WriteLine("Game End: Player{0} Win!", player);
+                }
 
-            player1.GetPosition(gomokuBoard);
-           
+            }
+            else //invalid
+            {
+                Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
+            }
+
         }
 
-       
+        public override void CheckPositionValid(int player)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

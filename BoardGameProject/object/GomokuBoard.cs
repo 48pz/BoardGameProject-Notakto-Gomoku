@@ -5,6 +5,16 @@
 
         private int[,] cells;
         private int size;
+        public int Size
+        {
+            get { return cells.GetLength(0); }  
+        }
+        public int[,] Cells
+        {
+            get { return cells;  }
+        }
+
+
 
         public GomokuBoard(int size)
         {
@@ -61,7 +71,13 @@
             return AbaliablePos;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
         public bool PlaceChess(int row, int col, int player)
         {
             if (cells[row, col] == 0)

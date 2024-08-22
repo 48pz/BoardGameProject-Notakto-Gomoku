@@ -52,7 +52,7 @@ namespace BoardGameProject
                     //computer vs human logic
                     if (gameMode.Equals(GlobalVar.COMPUTERVSHUMAN))
                     {
-                         gf = new GomokuAIAndHumanGameFlow(gameType, gameMode);
+                         gf = new GomokuAIAndHumanGameFlow(gameType, gameMode, ui);
                                             }
                     else//human vs human logic
                     {

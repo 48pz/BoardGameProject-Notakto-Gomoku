@@ -28,5 +28,6 @@ namespace BoardGameProject
             str = str.PadRight(padding);
             Console.WriteLine("│" + str + "│");
         }
+
     }
 }
