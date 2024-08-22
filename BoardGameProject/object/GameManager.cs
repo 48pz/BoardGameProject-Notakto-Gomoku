@@ -5,10 +5,13 @@ namespace BoardGameProject
     {
         private const string NOTAKTO_TYPE = "1";
         private const string GOMOKU_TYPE = "2";
-        private const string HUMANVSHUMAN = "1";
-        private const string COMPUTERVSHUMAN = "2";
-        private string _gameType;
-        private string _gameMode;
+        private const string HUMANVSHUMAN = "2";
+        private const string COMPUTERVSHUMAN = "1";
+        private string gameType;
+        private string gameMode;
+        private IGameStrategy strategy;
+        private IPlayer player1;
+        private IPlayer player2;
 
 
         /// <summary>
@@ -28,6 +31,7 @@ namespace BoardGameProject
             }
         }
 
+
         public void RunApp()
         {
             try
@@ -43,16 +47,27 @@ namespace BoardGameProject
                 quitFlag = ChooseGameMode(quitFlag);
                 if (quitFlag == true) return;
 
-                Setup();
-                ////choose gomoku
-                //if (_gameType.Equals(GlobalVar.GOMOKU))
-                //{
-                    
-                //}
-                //else//choose notakto
-                //{
 
-                //}
+                if (gameType == GlobalVar.GOMOKU)   
+                {
+                    SetupGomoku(gameMode);
+                    //computer vs human logic
+                    if (gameMode.Equals(GlobalVar.COMPUTERVSHUMAN))
+                    {
+                        GomokuAIAndHumanGameFlow gf = new GomokuAIAndHumanGameFlow();
+                    }
+                    else//human vs human logic
+                    {
+
+                    }
+
+                }
+                else
+                {
+                    //strategy = NotaktoStrategy.GetInstance();
+                }
+                
+
             }
             catch (Exception e)
             {
@@ -65,11 +80,30 @@ namespace BoardGameProject
         /// <summary>
         /// set up game config
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
-        private void Setup()
+        /// <param name="gameType"></param>
+        /// <param name="gameMode"></param>
+        private void SetupGomoku(string gameMode)
         {
-            throw new NotImplementedException();
+
+            strategy = GomokuStrategy.GetInstance();
+            if (gameMode == GlobalVar.COMPUTERVSHUMAN)
+            {
+                player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
+                player1 = PlayerFactory.CreatePlayer(GlobalVar.COMPUTER);
+                Console.WriteLine("\nPlayer1: Computer");
+                Console.WriteLine("Player2: Human");
+            }
+            else
+            {
+                player1 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
+                player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
+                Console.WriteLine("\nPlayer1: Human");
+                Console.WriteLine("Player2: Human");
+            }
+            Console.WriteLine("Player1 plays X, Player2 plays O");
+            strategy.InitialiseBoard();
         }
+
 
         /// <summary>
         /// select game mode
@@ -85,12 +119,12 @@ namespace BoardGameProject
                 string inputGameMode = Console.ReadLine();
                 if (inputGameMode.Equals(HUMANVSHUMAN))
                 {
-                    _gameMode = GlobalVar.HUMANVSHUMAN;
+                    gameMode = GlobalVar.HUMANVSHUMAN;
                     gameTypeMode = false;
                 }
-                else if (inputGameMode.Equals(GOMOKU_TYPE))
+                else if (inputGameMode.Equals(COMPUTERVSHUMAN))
                 {
-                    _gameMode = GlobalVar.COMPUTERVSHUMAN;
+                    gameMode = GlobalVar.COMPUTERVSHUMAN;
                     gameTypeMode = false;
 
                 }
@@ -123,13 +157,13 @@ namespace BoardGameProject
                 if (inputGameType.Equals(NOTAKTO_TYPE))
                 {
                     ui = new NotaktoUI();
-                    _gameType = GlobalVar.NOTAKTO;
+                    gameType = GlobalVar.NOTAKTO;
                     gameTypeFlag = false;
                 }
                 else if (inputGameType.Equals(GOMOKU_TYPE))
                 {
                     ui = new GomokuUI();
-                    _gameType = GlobalVar.GOMOKU;
+                    gameType = GlobalVar.GOMOKU;
                     gameTypeFlag = false;
 
                 }

@@ -12,7 +12,7 @@ namespace BoardGameProject
 
             PrintLine("Please enter number to select the mode!", padding);
             PrintLine("", padding);
-            PrintLine("Human VS Computer : 1", padding);
+            PrintLine("Computer VS Human : 1", padding);
             PrintLine("Human VS Human  : 2", padding);
 
             Console.WriteLine("└" + new string('─', width - 2) + "┘");
