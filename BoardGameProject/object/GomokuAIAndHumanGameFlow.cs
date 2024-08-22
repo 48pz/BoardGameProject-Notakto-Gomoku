@@ -1,4 +1,6 @@
-﻿namespace BoardGameProject
+﻿using System.Runtime.CompilerServices;
+
+namespace BoardGameProject
 {
     public class GomokuAIAndHumanGameFlow : GameFlowBase
     {
@@ -27,7 +29,7 @@
         {
             gameMode = aGameMode;
             gameType = aGameType;
-            ui = aUi;   
+            ui = aUi;
         }
 
         private PlayerBase player1;
@@ -39,6 +41,7 @@
         public override void SetUp()
         {
             gomokuBoard = new GomokuBoard(10);
+            checker = new GomokuChecker();
             player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
             player1 = PlayerFactory.CreatePlayer(GlobalVar.COMPUTER);
             Console.WriteLine("\nPlayer1: Computer");
@@ -51,32 +54,61 @@
             throw new NotImplementedException();
         }
 
-        public override void SelectPosition(int player)
+        public override bool SelectPosition(int player)
         {
-            var pos = player1.GetPosition(gomokuBoard);
-            bool isValid = checker.IsValidPlace(gomokuBoard, pos.Item1, pos.Item2);
+            bool isValid;
+            (int, int) pos;
+            if (player == 1)
+            {
+                pos = player1.GetPosition(gomokuBoard);
+            }
+            else
+            {
+                pos = player2.GetPosition();
+
+            }
+            isValid = checker.IsValidPlace(gomokuBoard, pos.Item1 - 1, pos.Item2 - 1);
+
+            //check validity then place chess
             if (isValid)//input valid
             {
+                if (gomokuBoard.PlaceChess(pos.Item1 - 1, pos.Item2 - 1, player))
+                {
+                    //if (player == 1)
+                    //{
+                    //    Console.WriteLine($"Computer places at {pos.Item1 + 1}, {pos.Item2 + 1}");
+
+                    //}
+                    //else
+                    //{
+                    Console.WriteLine($"Player{player} places at {pos.Item1}, {pos.Item2}");
+                    //}
+                }
+                else
+                {
+                    Console.WriteLine("Failed to place move");
+
+                }
+                gomokuBoard.PrintBoard();
                 if (checker.IsDraw(gomokuBoard))
                 {
-                    gomokuBoard.PrintBoard();
+
                     ui.DisplayInfo("Game End: Draw!");
-                }else if (checker.IsWin(gomokuBoard, pos.Item1,pos.Item2, player)){
-                    gomokuBoard.PrintBoard();
+                }
+                else if (checker.IsWin(gomokuBoard, pos.Item1, pos.Item2, player))
+                {
+
                     Console.WriteLine("Game End: Player{0} Win!", player);
                 }
+                return true;
 
             }
             else //invalid
             {
                 Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
             }
-
+            return false;
         }
 
-        public override void CheckPositionValid(int player)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

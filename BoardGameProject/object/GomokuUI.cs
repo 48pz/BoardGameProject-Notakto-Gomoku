@@ -1,5 +1,7 @@
 
 
+using System;
+
 namespace BoardGameProject
 {
     public class GomokuUI : UIBase
@@ -20,6 +22,8 @@ namespace BoardGameProject
             Console.WriteLine(info);
         }
 
+
+  
 
     }
 }

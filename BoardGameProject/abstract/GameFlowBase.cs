@@ -14,8 +14,11 @@
 
             while (!isGameOver)
             {
-                SelectPosition(currentPlayer);
-                CheckPositionValid(currentPlayer);
+                while (!SelectPosition(currentPlayer))
+                {
+                    continue;
+                }
+                
                 currentPlayer =  currentPlayer == 1 ? 2 : 1;//switch player
             }
             End();
@@ -24,8 +27,7 @@
 
        
         public abstract void SetUp();
-        public abstract void SelectPosition(int  player);
-        public abstract void CheckPositionValid(int player);
+        public abstract bool SelectPosition(int  player);
         public abstract void End();
     }
 }
