@@ -1,8 +1,23 @@
 ﻿
 
+
 namespace BoardGameProject
 {
-    internal class NotaktoBoard : IBoard
+    public class NotaktoBoard : IBoard
     {
+        public List<(int, int)> GetAvaliablePositions()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool PlaceChess(int row, int col, int player)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PrintBoard()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

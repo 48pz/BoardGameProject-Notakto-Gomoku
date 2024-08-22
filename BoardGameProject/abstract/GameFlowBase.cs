@@ -11,13 +11,13 @@
             bool isGameOver = false;
             SetUp();//it should include reloading game.
 
-            while (!isGameOver)
-            {
+            //while (!isGameOver)
+            //{
                 SelectPosition();
-                CheckPositionValid();
+                //CheckPositionValid();
 
-            }
-            End();
+            //}
+            //End();
         }
 
         public abstract void SetUp();

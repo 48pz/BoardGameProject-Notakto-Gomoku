@@ -9,9 +9,7 @@ namespace BoardGameProject
         private const string COMPUTERVSHUMAN = "1";
         private string gameType;
         private string gameMode;
-        private IGameStrategy strategy;
-        private IPlayer player1;
-        private IPlayer player2;
+        private GameFlowBase gf;
 
 
         /// <summary>
@@ -47,27 +45,35 @@ namespace BoardGameProject
                 quitFlag = ChooseGameMode(quitFlag);
                 if (quitFlag == true) return;
 
+                //Setup(gameType, gameMode);
 
                 if (gameType == GlobalVar.GOMOKU)   
                 {
-                    SetupGomoku(gameMode);
                     //computer vs human logic
                     if (gameMode.Equals(GlobalVar.COMPUTERVSHUMAN))
                     {
-                        GomokuAIAndHumanGameFlow gf = new GomokuAIAndHumanGameFlow();
-                    }
+                         gf = new GomokuAIAndHumanGameFlow(gameType, gameMode);
+                                            }
                     else//human vs human logic
                     {
-
+                         gf = new GomokuHumanAndHumanGameFlow();
                     }
 
                 }
                 else
                 {
-                    //strategy = NotaktoStrategy.GetInstance();
-                }
-                
+                    //computer vs human logic
+                    if (gameMode.Equals(GlobalVar.COMPUTERVSHUMAN))
+                    {
+                         gf = new NotaktoAIAndHumanGameFlow();
+                    }
+                    else//human vs human logic
+                    {
+                         gf = new NotaktoHumanAndHumanGameFlow();
+                    }
 
+                }
+                gf.play();
             }
             catch (Exception e)
             {
@@ -82,27 +88,35 @@ namespace BoardGameProject
         /// </summary>
         /// <param name="gameType"></param>
         /// <param name="gameMode"></param>
-        private void SetupGomoku(string gameMode)
-        {
+        //private void Setup(string gameType, string gameMode)
+        //{
+        //    if (gameType.Equals(GlobalVar.GOMOKU))
+        //    {
+        //        strategy = GomokuStrategy.GetInstance();
 
-            strategy = GomokuStrategy.GetInstance();
-            if (gameMode == GlobalVar.COMPUTERVSHUMAN)
-            {
-                player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
-                player1 = PlayerFactory.CreatePlayer(GlobalVar.COMPUTER);
-                Console.WriteLine("\nPlayer1: Computer");
-                Console.WriteLine("Player2: Human");
-            }
-            else
-            {
-                player1 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
-                player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
-                Console.WriteLine("\nPlayer1: Human");
-                Console.WriteLine("Player2: Human");
-            }
-            Console.WriteLine("Player1 plays X, Player2 plays O");
-            strategy.InitialiseBoard();
-        }
+        //    }
+        //    else
+        //    {
+        //        strategy = NotaktoStrategy.GetInstance();
+
+        //    }
+        //    if (gameMode == GlobalVar.COMPUTERVSHUMAN)
+        //    {
+        //        player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
+        //        player1 = PlayerFactory.CreatePlayer(GlobalVar.COMPUTER);
+        //        Console.WriteLine("\nPlayer1: Computer");
+        //        Console.WriteLine("Player2: Human");
+        //    }
+        //    else
+        //    {
+        //        player1 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
+        //        player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
+        //        Console.WriteLine("\nPlayer1: Human");
+        //        Console.WriteLine("Player2: Human");
+        //    }
+        //    Console.WriteLine("Player1 plays X, Player2 plays O");
+        //    strategy.InitialiseBoard();
+        //}
 
 
         /// <summary>
@@ -174,7 +188,7 @@ namespace BoardGameProject
                 }
                 else
                 {
-                    Console.WriteLine("Error: Please enter a valid number, try again.");
+                    Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
                 }
 
             }

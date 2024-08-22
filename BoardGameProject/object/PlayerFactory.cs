@@ -6,7 +6,7 @@ namespace BoardGameProject
     /// </summary>
     public class PlayerFactory
     {
-        public static IPlayer CreatePlayer(string playerType)
+        public static PlayerBase CreatePlayer(string playerType)
         {
             switch (playerType)
             {

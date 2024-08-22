@@ -2,7 +2,7 @@
 
 namespace BoardGameProject
 {
-    internal class HumanPlayer : IPlayer
+    public class HumanPlayer : PlayerBase
     {
         private string _currentInputs;
         public string CurrentInputs {
@@ -10,12 +10,14 @@ namespace BoardGameProject
             set { _currentInputs = value; }
         }
 
-        public void GetPosition()
+
+
+        public override void GetPosition(IBoard board = null)
         {
             throw new NotImplementedException();
         }
 
-        public void PassPosition()
+        public override void PassPosition()
         {
             throw new NotImplementedException();
         }
