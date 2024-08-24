@@ -50,10 +50,6 @@ namespace BoardGameProject
             }
         }
 
-        public bool IsWin(IBoard board, int row, int col, int player)
-        {
-            throw new NotImplementedException();
-        }
 
         private bool CheckDirection(GomokuBoard board, int row, int col, int player, int v1, int v2)
         {

@@ -41,6 +41,7 @@ namespace BoardGameProject
         public override void SetUp()
         {
             gomokuBoard = new GomokuBoard(10);
+
             checker = new GomokuChecker();
             player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
             player1 = PlayerFactory.CreatePlayer(GlobalVar.COMPUTER);
@@ -51,10 +52,10 @@ namespace BoardGameProject
 
         public override void End()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Game Over... See you next time...");
         }
 
-        public override bool SelectPosition(int player)
+        public override bool SelectPosition(int player, out bool isGameOver)
         {
             bool isValid;
             (int, int) pos;
@@ -68,21 +69,14 @@ namespace BoardGameProject
 
             }
             isValid = checker.IsValidPlace(gomokuBoard, pos.Item1 - 1, pos.Item2 - 1);
+            isGameOver = false;
 
             //check validity then place chess
             if (isValid)//input valid
             {
                 if (gomokuBoard.PlaceChess(pos.Item1 - 1, pos.Item2 - 1, player))
                 {
-                    //if (player == 1)
-                    //{
-                    //    Console.WriteLine($"Computer places at {pos.Item1 + 1}, {pos.Item2 + 1}");
-
-                    //}
-                    //else
-                    //{
                     Console.WriteLine($"Player{player} places at {pos.Item1}, {pos.Item2}");
-                    //}
                 }
                 else
                 {
@@ -94,11 +88,15 @@ namespace BoardGameProject
                 {
 
                     ui.DisplayInfo("Game End: Draw!");
+                    isGameOver = true;
+
                 }
-                else if (checker.IsWin(gomokuBoard, pos.Item1, pos.Item2, player))
+                else if (checker.IsWin(gomokuBoard, pos.Item1 - 1, pos.Item2 - 1, player))
                 {
 
                     Console.WriteLine("Game End: Player{0} Win!", player);
+                    isGameOver = true;
+
                 }
                 return true;
 
@@ -106,8 +104,11 @@ namespace BoardGameProject
             else //invalid
             {
                 Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
+
+                return false;
             }
-            return false;
+
+
         }
 
     }

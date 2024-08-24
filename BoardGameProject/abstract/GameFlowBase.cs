@@ -8,26 +8,33 @@
     {
         public void play()
         {
-            bool isGameOver = false;
-            int currentPlayer = 1;
-            SetUp();//it should include reloading game.
-
-            while (!isGameOver)
+            try
             {
-                while (!SelectPosition(currentPlayer))
+                bool isGameOver = false;
+                int currentPlayer = 1;
+                SetUp();//it should include reloading game.
+
+                while (!isGameOver)
                 {
-                    continue;
+                    while (!SelectPosition(currentPlayer, out isGameOver))
+                    {
+                        continue;
+                    }
+                    currentPlayer = currentPlayer == 1 ? 2 : 1;//switch player
                 }
-                
-                currentPlayer =  currentPlayer == 1 ? 2 : 1;//switch player
+                End();
             }
-            End();
+            catch (Exception e)
+            {
+                Console.Write(e.ToString());
+            }
+
         }
 
 
-       
+
         public abstract void SetUp();
-        public abstract bool SelectPosition(int  player);
+        public abstract bool SelectPosition(int player, out bool isGameOver);
         public abstract void End();
     }
 }

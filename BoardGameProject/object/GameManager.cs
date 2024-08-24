@@ -74,6 +74,7 @@ namespace BoardGameProject
 
                 }
                 gf.play();
+
             }
             catch (Exception e)
             {
