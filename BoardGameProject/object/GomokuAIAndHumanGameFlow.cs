@@ -36,6 +36,7 @@ namespace BoardGameProject
         private PlayerBase player2;
         public GomokuBoard gomokuBoard;
         private GomokuChecker checker;
+        private GomokuSaver saver;
 
 
         public override void SetUp()
@@ -47,6 +48,8 @@ namespace BoardGameProject
             player1 = PlayerFactory.CreatePlayer(GlobalVar.COMPUTER);
             Console.WriteLine("\nPlayer1: Computer");
             Console.WriteLine("Player2: Human");
+            gomokuBoard.GameMode = gameMode;
+            saver = new GomokuSaver();
 
         }
 
@@ -57,6 +60,7 @@ namespace BoardGameProject
 
         public override bool SelectPosition(int player, out bool isGameOver)
         {
+            isGameOver = false;
             bool isValid;
             (int, int) pos;
             if (player == 1)
@@ -66,10 +70,18 @@ namespace BoardGameProject
             else
             {
                 pos = player2.GetPosition();
-
+                if (pos == (999, 999))
+                {
+                    string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    //save to desktop
+                    saver.SaveBoardInfo(gomokuBoard, baseDir);
+                    //save then game over;
+                    isGameOver = true;
+                    return true;
+                }
             }
             isValid = checker.IsValidPlace(gomokuBoard, pos.Item1 - 1, pos.Item2 - 1);
-            isGameOver = false;
+            
 
             //check validity then place chess
             if (isValid)//input valid
@@ -94,7 +106,7 @@ namespace BoardGameProject
                 else if (checker.IsWin(gomokuBoard, pos.Item1 - 1, pos.Item2 - 1, player))
                 {
 
-                    Console.WriteLine("Game End: Player{0} Win!", player);
+                    Console.WriteLine("Game End: Player{0} Won!", player);
                     isGameOver = true;
 
                 }

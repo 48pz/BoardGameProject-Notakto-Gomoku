@@ -1,19 +1,19 @@
 ﻿
 namespace BoardGameProject
 {
-    public class NotaktoChecker : IChecker
+    public class NotaktoChecker : IChecker<NotaktoBoard>
     {
-        public bool IsDraw(IBoard board)
+        public bool IsDraw(NotaktoBoard board)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsValidPlace(IBoard board, int row, int col, int size)
+        public bool IsValidPlace(NotaktoBoard board, int row, int col)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsWin(IBoard board, int row, int col, int player)
+        public bool IsWin(NotaktoBoard board, int row, int col, int player)
         {
             throw new NotImplementedException();
         }

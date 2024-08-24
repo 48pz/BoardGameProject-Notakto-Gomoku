@@ -18,6 +18,10 @@ namespace BoardGameProject
             while (true)
             {
                 string inputs = Console.ReadLine();
+                if (inputs.Equals(GlobalVar.SAVE))
+                {
+                    return (999, 999);
+                }
                 string[] pos = inputs.Split(' ');
                 if (pos.Length != 2) { Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG); continue; }
                 if (int.TryParse(pos[0], out int x) && int.TryParse(pos[1], out int y))
@@ -38,7 +42,7 @@ namespace BoardGameProject
                     continue;
                 }
 
-            } 
+            }
 
         }
 

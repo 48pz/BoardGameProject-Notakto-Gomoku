@@ -5,13 +5,28 @@
 
         private int[,] cells;
         private int size;
+        private string gameName = GlobalVar.GOMOKU;
+        private string gameMode;
+
+
+        public string GameName
+        {
+            get { return gameName; }
+        }
+
+        public string GameMode
+        {
+            get { return gameMode; }
+            set { gameMode = value; }
+        }
+
         public int Size
         {
-            get { return cells.GetLength(0); }  
+            get { return cells.GetLength(0); }
         }
         public int[,] Cells
         {
-            get { return cells;  }
+            get { return cells; }
         }
 
 

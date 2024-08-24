@@ -1,15 +1,13 @@
 ﻿
 namespace BoardGameProject
 {
-    public interface IChecker
+    public interface IChecker<TBoard>
     {
 
 
-        bool IsValidPlace(IBoard board, int row, int col, int size);
-
-        //bool IsWin(IBoard board, int row, int col, int player);   remeber modify this !
-
-        bool IsDraw(IBoard board);
+        bool IsValidPlace(TBoard board, int row, int col);
+        bool IsWin(TBoard board, int row, int col, int player); 
+        bool IsDraw(TBoard board);
 
     }
 }

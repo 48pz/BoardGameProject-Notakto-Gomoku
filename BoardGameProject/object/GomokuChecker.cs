@@ -4,9 +4,9 @@
 
 namespace BoardGameProject
 {
-    internal class GomokuChecker : IChecker
+    internal class GomokuChecker : IChecker<GomokuBoard>
     {
-        public bool IsDraw(IBoard board)
+        public bool IsDraw(GomokuBoard board)
         {
             for (int i = 0; i < board.Size; i++)
             {
@@ -30,11 +30,6 @@ namespace BoardGameProject
                 return false;
             }
 
-        }
-
-        public bool IsValidPlace(IBoard board, int row, int col, int size)
-        {
-            throw new NotImplementedException();
         }
 
         public bool IsWin(GomokuBoard board, int row, int col, int player)
