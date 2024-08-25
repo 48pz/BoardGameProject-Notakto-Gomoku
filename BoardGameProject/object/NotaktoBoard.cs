@@ -20,7 +20,9 @@ namespace BoardGameProject
             throw new NotImplementedException();
         }
 
-        public void PrintBoard()
+  
+
+        public void PrintBoard(int round)
         {
             throw new NotImplementedException();
         }

@@ -27,6 +27,16 @@ namespace BoardGameProject
                 {
                     return (998, 998);
                 }
+                else if (inputs.Equals(GlobalVar.UNDO))
+                {
+                    return (997, 997);
+                }
+                else if (inputs.Equals(GlobalVar.REDO))
+                {
+                    return (996, 996);
+
+                }
+
                 string[] pos = inputs.Split(' ');
                 if (pos.Length != 2) { Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG); continue; }
                 if (int.TryParse(pos[0], out int x) && int.TryParse(pos[1], out int y))

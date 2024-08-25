@@ -12,15 +12,17 @@
             {
                 bool isGameOver = false;
                 int currentPlayer = 1;
+                int round = 1;
                 SetUp();//it should include reloading game.
 
                 while (!isGameOver)
                 {
-                    while (!SelectPosition(ref currentPlayer, out isGameOver))
+                    while (!SelectPosition(ref currentPlayer, out isGameOver, round))
                     {
                         continue;
                     }
                     currentPlayer = currentPlayer == 1 ? 2 : 1;//switch player
+                    round++;
                 }
                 End();
             }
@@ -34,7 +36,7 @@
 
 
         public abstract void SetUp();
-        public abstract bool SelectPosition(ref int player, out bool isGameOver);
+        public abstract bool SelectPosition(ref int player, out bool isGameOver, int round);
         public abstract void End();
     }
 }

@@ -12,6 +12,18 @@ namespace BoardGameProject
         //Used to verify loading file
         private readonly string validationStr = GlobalVar.GOMOKU;
         private int currentPlayer;
+        private int round;
+
+        public int Round
+        {
+            get { return round; }
+            set
+            {
+
+                round = value;
+            }
+        }
+
 
         public int CurrentPlayer
         {
@@ -41,14 +53,6 @@ namespace BoardGameProject
             get { return cells.Count; }
             set { size = value; }
         }
-
-        //[JsonIgnore]
-        //public int[,] Cells
-        //{
-        //    get { return cells; }
-        //    set {  cells = value; } 
-        //}
-
 
         public List<List<int>> Cells
         {
@@ -85,8 +89,9 @@ namespace BoardGameProject
         /// <summary>
         /// print board 
         /// </summary>
-        public void PrintBoard()
+        public void PrintBoard(int round)
         {
+            Console.WriteLine("\nRound: {0}", round);
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
