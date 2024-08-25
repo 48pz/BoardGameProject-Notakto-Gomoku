@@ -18,9 +18,14 @@ namespace BoardGameProject
             while (true)
             {
                 string inputs = Console.ReadLine();
+
                 if (inputs.Equals(GlobalVar.SAVE))
                 {
                     return (999, 999);
+                }
+                else if (inputs.Equals(GlobalVar.LOAD))
+                {
+                    return (998, 998);
                 }
                 string[] pos = inputs.Split(' ');
                 if (pos.Length != 2) { Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG); continue; }

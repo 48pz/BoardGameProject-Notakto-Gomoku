@@ -20,7 +20,6 @@ namespace BoardGameProject
             PrintLine("", padding);
             PrintLine("Notakto : 1", padding);
             PrintLine("Gomoku  : 2", padding);
-
             Console.WriteLine("└" + new string('─', width - 2) + "┘");
         }
 

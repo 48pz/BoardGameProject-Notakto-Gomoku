@@ -14,7 +14,6 @@ namespace BoardGameProject
             PrintLine("", padding);
             PrintLine("Computer VS Human : 1", padding);
             PrintLine("Human VS Human  : 2", padding);
-
             Console.WriteLine("└" + new string('─', width - 2) + "┘");
         }
 

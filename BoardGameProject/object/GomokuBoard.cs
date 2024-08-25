@@ -1,17 +1,33 @@
-﻿namespace BoardGameProject
+﻿using System.Text.Json.Serialization;
+
+namespace BoardGameProject
 {
+
     public class GomokuBoard : IBoard
     {
-
-        private int[,] cells;
+        private List<List<int>> cells;
         private int size;
         private string gameName = GlobalVar.GOMOKU;
         private string gameMode;
+        //Used to verify loading file
+        private readonly string validationStr = GlobalVar.GOMOKU;
+        private int currentPlayer;
 
+        public int CurrentPlayer
+        {
+            get { return currentPlayer; }
+            set { currentPlayer = value; }
+        }
+
+        public string ValidationStr
+        {
+            get { return validationStr; }
+        }
 
         public string GameName
         {
             get { return gameName; }
+            set { gameName = value; }
         }
 
         public string GameMode
@@ -22,21 +38,34 @@
 
         public int Size
         {
-            get { return cells.GetLength(0); }
+            get { return cells.Count; }
+            set { size = value; }
         }
-        public int[,] Cells
+
+        //[JsonIgnore]
+        //public int[,] Cells
+        //{
+        //    get { return cells; }
+        //    set {  cells = value; } 
+        //}
+
+
+        public List<List<int>> Cells
         {
             get { return cells; }
+            set { cells = value; }
         }
-
-
 
         public GomokuBoard(int size)
         {
             this.size = size;
-            cells = new int[size, size];
+            cells = new List<List<int>>(size);
+
+            for (int i = 0; i < size; i++)
+            {
+                cells.Add(new List<int>(new int[size]));
+            }
             InitialiseBoard();
-            PrintBoard();
         }
 
         /// <summary>
@@ -48,7 +77,7 @@
             {
                 for (int j = 0; j < size; j++)
                 {
-                    cells[i, j] = 0;
+                    cells[i][j] = 0;
                 }
             }
         }
@@ -62,7 +91,7 @@
             {
                 for (int j = 0; j < size; j++)
                 {
-                    char symbol = cells[i, j] == 0 ? '.' : (cells[i, j] == 1 ? 'X' : 'O');
+                    char symbol = cells[i][j] == 0 ? '.' : (cells[i][j] == 1 ? 'X' : 'O');
                     Console.Write($"{symbol} ");
                 }
                 Console.WriteLine();
@@ -79,7 +108,7 @@
             {
                 for (int j = 0; j < size; j++)
                 {
-                    if (cells[i, j] == 0)
+                    if (cells[i][j] == 0)
                     {
                         AbaliablePos.Add((i, j));
                     }
@@ -97,9 +126,9 @@
         /// <returns></returns>
         public bool PlaceChess(int row, int col, int player)
         {
-            if (cells[row, col] == 0)
+            if (cells[row][col] == 0)
             { // Check if cell is empty
-                cells[row, col] = player; // Player 1 is 'X', Player 2 is 'O'
+                cells[row][col] = player; // Player 1 is 'X', Player 2 is 'O'
                 return true;
             }
             return false;

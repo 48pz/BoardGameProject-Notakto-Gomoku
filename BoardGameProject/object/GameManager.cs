@@ -1,4 +1,7 @@
 
+using Newtonsoft.Json;
+using System.Runtime.Intrinsics.X86;
+
 namespace BoardGameProject
 {
     public class GameManager
@@ -41,22 +44,21 @@ namespace BoardGameProject
                 ChooseGameType(ref ui, ref quitFlag);
                 if (quitFlag == true) return;
                 ui.DisplayGameMode();
-
                 quitFlag = ChooseGameMode(quitFlag);
                 if (quitFlag == true) return;
 
-                //Setup(gameType, gameMode);
+                //
 
-                if (gameType == GlobalVar.GOMOKU)   
+                if (gameType == GlobalVar.GOMOKU)
                 {
                     //computer vs human logic
                     if (gameMode.Equals(GlobalVar.COMPUTERVSHUMAN))
                     {
-                         gf = new GomokuAIAndHumanGameFlow(gameType, gameMode, ui);
-                                            }
+                        gf = new GomokuAIAndHumanGameFlow(gameType, gameMode, ui);
+                    }
                     else//human vs human logic
                     {
-                         gf = new GomokuHumanAndHumanGameFlow();
+                        gf = new GomokuHumanAndHumanGameFlow();
                     }
 
                 }
@@ -65,11 +67,11 @@ namespace BoardGameProject
                     //computer vs human logic
                     if (gameMode.Equals(GlobalVar.COMPUTERVSHUMAN))
                     {
-                         gf = new NotaktoAIAndHumanGameFlow();
+                        gf = new NotaktoAIAndHumanGameFlow();
                     }
                     else//human vs human logic
                     {
-                         gf = new NotaktoHumanAndHumanGameFlow();
+                        gf = new NotaktoHumanAndHumanGameFlow();
                     }
 
                 }
@@ -83,41 +85,6 @@ namespace BoardGameProject
             }
 
         }
-
-        /// <summary>
-        /// set up game config
-        /// </summary>
-        /// <param name="gameType"></param>
-        /// <param name="gameMode"></param>
-        //private void Setup(string gameType, string gameMode)
-        //{
-        //    if (gameType.Equals(GlobalVar.GOMOKU))
-        //    {
-        //        strategy = GomokuStrategy.GetInstance();
-
-        //    }
-        //    else
-        //    {
-        //        strategy = NotaktoStrategy.GetInstance();
-
-        //    }
-        //    if (gameMode == GlobalVar.COMPUTERVSHUMAN)
-        //    {
-        //        player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
-        //        player1 = PlayerFactory.CreatePlayer(GlobalVar.COMPUTER);
-        //        Console.WriteLine("\nPlayer1: Computer");
-        //        Console.WriteLine("Player2: Human");
-        //    }
-        //    else
-        //    {
-        //        player1 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
-        //        player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
-        //        Console.WriteLine("\nPlayer1: Human");
-        //        Console.WriteLine("Player2: Human");
-        //    }
-        //    Console.WriteLine("Player1 plays X, Player2 plays O");
-        //    strategy.InitialiseBoard();
-        //}
 
 
         /// <summary>
@@ -194,5 +161,56 @@ namespace BoardGameProject
 
             }
         }
+
+        //private IBoard LoadGame()
+        //{
+        //    Console.WriteLine("Please enter the FULL PATH to load the game:");
+
+        //    try
+        //    {
+        //        while (true)
+        //        {
+        //            string savePath = Console.ReadLine();
+        //            if (string.IsNullOrWhiteSpace(savePath) || !File.Exists(savePath))
+        //            {
+        //                Console.WriteLine("Error: file does not exist!");
+        //                continue;
+        //            }
+
+        //            string jsonStr = File.ReadAllText(savePath);
+        //            if (gameType.Equals(GlobalVar.GOMOKU))
+        //            {
+        //                GomokuBoard board = JsonConvert.DeserializeObject<GomokuBoard>(jsonStr);
+        //                if (!board.ValidationStr.Equals(GlobalVar.GOMOKU))
+        //                {
+        //                    Console.WriteLine("Error: Wrong file type, please confirm the board type is:{0}", GlobalVar.GOMOKU);
+        //                    continue;
+        //                }
+        //                return board;
+        //            }
+        //            else
+        //            {
+        //                NotaktoBoard board = JsonConvert.DeserializeObject<NotaktoBoard>(jsonStr);
+        //                //for notakto
+        //                //if (!board.ValidationStr.Equals(GlobalVar.GOMOKU))
+        //                //{
+        //                //    Console.WriteLine("Error: Wrong file type, please confirm the board type is:{0}", GlobalVar.GOMOKU);
+        //                //    continue;
+        //                //}
+        //                return board;
+        //            }
+        //            break;
+
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.ToString());
+        //    }
+
+        //    return null;
+        //}
+
     }
 }
+

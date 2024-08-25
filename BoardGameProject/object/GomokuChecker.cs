@@ -12,7 +12,7 @@ namespace BoardGameProject
             {
                 for (int j = 0; j < board.Size; j++)
                 {
-                    if (board.Cells[i, j] == 0) return false;
+                    if (board.Cells[i][j] == 0) return false;
                 }
             }
             return true;
@@ -21,7 +21,7 @@ namespace BoardGameProject
 
         public bool IsValidPlace(GomokuBoard board, int row, int col)
         {
-            if (board.Cells[row, col] == 0 && row < board.Size && col >= 0 && col < board.Size && row >= 0)
+            if (board.Cells[row][col] == 0 && row < board.Size && col >= 0 && col < board.Size && row >= 0)
             {
                 return true;
             }
@@ -59,7 +59,7 @@ namespace BoardGameProject
             int count = 0;
             row += v1;
             col += v2;
-            while (row >= 0 && row < board.Size && col >= 0 && col < board.Size && board.Cells[row, col] == player)
+            while (row >= 0 && row < board.Size && col >= 0 && col < board.Size && board.Cells[row][col] == player)
             {
                 count++;
                 row += v1;

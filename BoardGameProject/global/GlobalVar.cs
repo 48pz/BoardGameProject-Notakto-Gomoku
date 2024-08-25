@@ -9,8 +9,9 @@ namespace BoardGameProject
         public const string COMPUTERVSHUMAN = "ComputerVsHuman";
         public const string HUMANVSHUMAN = "HumanVsHuman";
         public const string USERINPUTSINVALIDMSG = "Error: Please enter a valid number, try again.";
-        public const string HUMAN =  "Human";
+        public const string HUMAN = "Human";
         public const string COMPUTER = "Computer";
         public const string SAVE = "save";
+        public const string LOAD = "load";
     }
 }

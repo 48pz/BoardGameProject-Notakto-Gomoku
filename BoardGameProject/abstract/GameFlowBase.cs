@@ -16,7 +16,7 @@
 
                 while (!isGameOver)
                 {
-                    while (!SelectPosition(currentPlayer, out isGameOver))
+                    while (!SelectPosition(ref currentPlayer, out isGameOver))
                     {
                         continue;
                     }
@@ -34,7 +34,7 @@
 
 
         public abstract void SetUp();
-        public abstract bool SelectPosition(int player, out bool isGameOver);
+        public abstract bool SelectPosition(ref int player, out bool isGameOver);
         public abstract void End();
     }
 }

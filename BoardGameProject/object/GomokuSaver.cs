@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿
+using System.Text.Json;
 
 namespace BoardGameProject
 {
@@ -21,8 +22,10 @@ namespace BoardGameProject
                     Directory.CreateDirectory(saveFolderPath);
                 }
                 string fullName = Path.Combine(saveFolderPath, fileName);
-                string json = JsonConvert.SerializeObject(board);
-                File.WriteAllText(fullName, json);
+
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string jsonString = JsonSerializer.Serialize(board, options);
+                File.WriteAllText(fullName, jsonString);
                 Console.WriteLine("Game saved to {0}", fullName);
 
             }
