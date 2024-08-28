@@ -55,8 +55,6 @@ namespace BoardGameProject
             gomokuBoard.GameMode = gameMode;
             saver = new GomokuSaver();
             am = new GomokuActionManager();
-
-
         }
 
         public override void End()

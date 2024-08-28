@@ -58,7 +58,7 @@ namespace BoardGameProject
                     }
                     else//human vs human logic
                     {
-                        gf = new GomokuHumanAndHumanGameFlow();
+                        gf = new GomokuHumanAndHumanGameFlow(gameType, gameMode,ui);
                     }
 
                 }
