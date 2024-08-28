@@ -19,6 +19,7 @@ namespace BoardGameProject
             {
                 string inputs = Console.ReadLine();
 
+
                 if (inputs.Equals(GlobalVar.SAVE))
                 {
                     return (999, 999);

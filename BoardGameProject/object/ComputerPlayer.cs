@@ -15,16 +15,6 @@ namespace BoardGameProject
                 var (row, col) = avaliablePos[random.Next(avaliablePos.Count)];
                 return (row+1, col+1);
 
-                //if (board.PlaceChess(row, col, 1))
-                //{
-                //    Console.WriteLine($"Computer places at {row + 1}, {col + 1}");
-                //    return (row, col);
-                //}
-                //else
-                //{
-                //    Console.WriteLine("Failed to place move");
-
-                //}
             }
             else
             {

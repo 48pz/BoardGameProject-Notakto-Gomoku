@@ -1,5 +1,4 @@
 ﻿
-using System.Drawing;
 using System.Text.Json;
 
 namespace BoardGameProject
@@ -65,7 +64,7 @@ namespace BoardGameProject
             Console.WriteLine("Game Over... See you next time...");
         }
 
-        public override bool SelectPosition(ref int player, out bool isGameOver, int round)
+        public override bool SelectPosition(ref int player, out bool isGameOver, ref int round)
         {
             isGameOver = false;
             bool isValid;
@@ -125,6 +124,48 @@ namespace BoardGameProject
                         Console.WriteLine(e.ToString());
                     }
                 }
+                //undo
+                else if (pos == (997, 997))
+                {
+                    while (true)
+                    {
+                        Console.WriteLine("Which round do you want to undo to?");
+                        int inputRound;
+                        if (int.TryParse(Console.ReadLine(), out inputRound))
+                        {
+                            if (inputRound > 0 && inputRound < round)
+                            {
+                                if (am.Undo(boardHistory, inputRound, gomokuBoard))
+                                {
+                                    int temp = round;
+                                    round = inputRound;
+                                    //redo
+                                    Console.WriteLine("Confirm undo: enter undo to confirm; enter redo to cancel.");
+                                    (int, int) confirm = player2.GetPosition();
+                                    if (confirm == (996, 996))
+                                    {
+                                        am.Redo(gomokuBoard);
+                                        round = temp;
+                                    }
+                                    break;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Error: enter a number between 1 and {0}", (round - 1));
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
+                            }
+
+                        }
+
+
+                    }
+                    return true;
+
+                }
 
             }
             isValid = checker.IsValidPlace(gomokuBoard, pos.Item1 - 1, pos.Item2 - 1);
@@ -159,43 +200,7 @@ namespace BoardGameProject
                     isGameOver = true;
 
                 }
-                //undo
-                if (pos == (997, 997))
-                {
-                    while (true)
-                    {
-                        Console.WriteLine("Which round do you want to undo to?");
-                        int inputRound;
-                        if (int.TryParse(Console.ReadLine(), out inputRound))
-                        {
-                            if (inputRound > 0 && inputRound < round)
-                            {
-                                am.Undo(boardHistory, inputRound, gomokuBoard);
-                                break;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Error: enter a number between 1 and {0}", (round - 1));
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
-                        }
-
-                    }
-
-                    //redo
-                    if (pos == (996, 996))
-                    {
-                        am.Redo(gomokuBoard);
-                    }
-
-
-                }
-
                 return true;
-
             }
             else //invalid
             {

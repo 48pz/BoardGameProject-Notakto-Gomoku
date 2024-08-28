@@ -11,7 +11,7 @@ namespace BoardGameProject
         }
 
 
-        public override bool SelectPosition(ref int player, out bool isGameOver, int round)
+        public override bool SelectPosition(ref int player, out bool isGameOver, ref int round)
         {
             throw new NotImplementedException();
         }

@@ -54,7 +54,19 @@ namespace BoardGameProject
         {
             if (targetRound > 0 && targetRound < history.Count)
             {
-                int[,] targetBoard = history[targetRound];
+                //save current board info
+                int[,] currentBoard = new int[board.Size, board.Size];
+
+                for (int i = 0; i < board.Size; i++)
+                {
+                    for (int j = 0; j < board.Size; j++)
+                    {
+                        currentBoard[i, j] = board.Cells[i][j];
+                    }
+                }
+                redoStack.Push(currentBoard);
+
+                int[,] targetBoard = history[targetRound - 1];
                 for (int i = 0; i < board.Size; i++)
                 {
                     for (int j = 0; j < board.Size; j++)
@@ -73,41 +85,5 @@ namespace BoardGameProject
             }
 
         }
-
-        //public bool Redo(GomokuBoard board)
-        //{
-        //    if (redoStack.Count > 0 && lastMoveByHumanPlayer)
-        //    {
-        //        Move move = redoStack.Pop();
-        //        board.Cells[move.Row][move.Col] = move.CurrentPlayer;
-        //        undoStack.Push(move);
-        //        Console.WriteLine($"Redo：Player{move.CurrentPlayer} at ({move.Row + 1}, {move.Col + 1})");
-        //        board.PrintBoard();
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Error: Redo failed!");
-        //        return false;
-        //    }
-        //}
-
-        //public bool Undo(GomokuBoard board)
-        //{
-        //    if (undoStack.Count > 0 && lastMoveByHumanPlayer)
-        //    {
-        //        Move lastMove = undoStack.Pop();
-        //        redoStack.Push(lastMove);
-        //        board.Cells[lastMove.Row][lastMove.Col] = 0;
-        //        Console.WriteLine($"Undo：Player{lastMove.CurrentPlayer} at ({lastMove.Row + 1}, {lastMove.Col + 1})");
-        //        board.PrintBoard();
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Error: Undo failed!");
-        //        return false;
-        //    }
-        //}
     }
 }

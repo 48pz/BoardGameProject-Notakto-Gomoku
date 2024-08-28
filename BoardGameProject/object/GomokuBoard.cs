@@ -5,7 +5,7 @@ namespace BoardGameProject
 
     public class GomokuBoard : IBoard
     {
-        private List<List<int>> cells;
+        private List<List<int>> cells; 
         private int size;
         private string gameName = GlobalVar.GOMOKU;
         private string gameMode;
@@ -13,6 +13,7 @@ namespace BoardGameProject
         private readonly string validationStr = GlobalVar.GOMOKU;
         private int currentPlayer;
         private int round;
+
 
         public int Round
         {
