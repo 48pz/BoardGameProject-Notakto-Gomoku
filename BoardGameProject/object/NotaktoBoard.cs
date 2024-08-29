@@ -98,12 +98,17 @@ namespace BoardGameProject
         public void PrintBoard(int round)
         {
             Console.WriteLine("\nRound: {0}", round);
-            for (int i = 0; i < size; i++)
+            for (int b = 0; b < count; b++) // for display Notakto 3 boards
             {
-                for (int j = 0; j < size; j++)
+                Console.WriteLine("Board {0}:", b + 1);
+                for (int i = 0; i < size; i++)
                 {
-                    char symbol = boards[currentBoardIndex][i][j] == 0 ? '.' : 'X';
-                    Console.Write($"{symbol} ");
+                    for (int j = 0; j < size; j++)
+                    {
+                        char symbol = boards[currentBoardIndex][i][j] == 0 ? '.' : 'X';
+                        Console.Write($"{symbol} ");
+                    }
+                    Console.WriteLine();
                 }
                 Console.WriteLine();
             }

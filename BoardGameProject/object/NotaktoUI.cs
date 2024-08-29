@@ -9,14 +9,14 @@ namespace BoardGameProject
             UIUtils.DisplayGameMode();
         }
 
-        public override void DisplayInfo(string str)
+        public override string PassInfoToGameManager()
         {
             throw new NotImplementedException();
         }
 
-        public override string PassInfoToGameManager()
+        public override void DisplayInfo(string info)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(info);
         }
     }
 }

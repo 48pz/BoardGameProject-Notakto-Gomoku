@@ -197,7 +197,6 @@ namespace BoardGameProject
 
         }
 
-
         public override void SetUp()
         {
             gomokuBoard = new GomokuBoard(10);

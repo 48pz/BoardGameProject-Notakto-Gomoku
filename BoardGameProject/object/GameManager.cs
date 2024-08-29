@@ -67,11 +67,11 @@ namespace BoardGameProject
                     //computer vs human logic
                     if (gameMode.Equals(GlobalVar.COMPUTERVSHUMAN))
                     {
-                        gf = new NotaktoAIAndHumanGameFlow();
+                        gf = new NotaktoAIAndHumanGameFlow(gameType, gameMode, ui);
                     }
                     else//human vs human logic
                     {
-                        gf = new NotaktoHumanAndHumanGameFlow();
+                        gf = new NotaktoHumanAndHumanGameFlow(gameType, gameMode, ui);
                     }
 
                 }
