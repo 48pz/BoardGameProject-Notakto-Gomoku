@@ -65,9 +65,9 @@ namespace BoardGameProject
         public override bool SelectPosition(ref int player, out bool isGameOver, ref int round)
         {
             isGameOver = false;
-            bool isValid;
             (int, int) pos;
             gomokuBoard.CurrentPlayer = player;
+
             if (player == 1)
             {
                 pos = player1.GetPosition(gomokuBoard);
@@ -75,139 +75,127 @@ namespace BoardGameProject
             else
             {
                 pos = player2.GetPosition();
-                //save
-                if (pos == (999, 999))
+
+                // 识别特殊指令坐标并处理
+                if (pos == (999, 999))  // Save
                 {
                     string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                    //save to desktop
                     saver.SaveBoardInfo(gomokuBoard, baseDir);
-                    //save then game over;
-                    isGameOver = true;
+                    Console.WriteLine("Game saved successfully.");
                     return true;
                 }
-                //load
-                else if (pos == (998, 998))
+                else if (pos == (998, 998))  // Load
                 {
-                    Console.WriteLine("Please enter the FULL PATH to load the game:");
-
-                    try
-                    {
-                        while (true)
-                        {
-                            string savePath = Console.ReadLine();
-                            if (string.IsNullOrWhiteSpace(savePath) || !File.Exists(savePath))
-                            {
-                                Console.WriteLine("Error: file does not exist!");
-                                continue;
-                            }
-
-                            string jsonStr = File.ReadAllText(savePath);
-                            if (gameType.Equals(GlobalVar.GOMOKU))
-                            {
-                                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                                GomokuBoard board = JsonSerializer.Deserialize<GomokuBoard>(jsonStr, options);
-
-                                if (board.ValidationStr.Equals(GlobalVar.GOMOKU))
-                                {
-                                    gomokuBoard = board;
-                                    Console.WriteLine("\nLoading Successfully!");
-                                    gomokuBoard.PrintBoard(round);
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.ToString());
-                    }
+                    PerformLoadOperation(ref round);
+                    return false;
                 }
-                //undo
-                else if (pos == (997, 997))
+                else if (pos == (997, 997))  // Undo
                 {
-                    while (true)
-                    {
-                        Console.WriteLine("Which round do you want to undo to?");
-                        int inputRound;
-                        if (int.TryParse(Console.ReadLine(), out inputRound))
-                        {
-                            if (inputRound > 0 && inputRound < round)
-                            {
-                                if (am.Undo(boardHistory, inputRound, gomokuBoard))
-                                {
-                                    int temp = round;
-                                    round = inputRound;
-                                    //redo
-                                    Console.WriteLine("Confirm undo: enter undo to confirm; enter redo to cancel.");
-                                    (int, int) confirm = player2.GetPosition();
-                                    if (confirm == (996, 996))
-                                    {
-                                        am.Redo(gomokuBoard);
-                                        round = temp;
-                                    }
-                                    break;
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Error: enter a number between 1 and {0}", (round - 1));
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
-                            }
-
-                        }
-
-
-                    }
+                    PerformUndoOperation(ref round);
                     return true;
-
                 }
-
+                else if (pos == (996, 996))  // Redo
+                {
+                    am.Redo(gomokuBoard);
+                    return true;
+                }
             }
-            isValid = checker.IsValidPlace(gomokuBoard, pos.Item1 - 1, pos.Item2 - 1);
 
+            // 常规坐标验证和处理
+            bool isValid = checker.IsValidPlace(gomokuBoard, pos.Item1 - 1, pos.Item2 - 1);
 
-            //check validity then place chess
-            if (isValid)//input valid
+            if (isValid)
             {
                 if (gomokuBoard.PlaceChess(pos.Item1 - 1, pos.Item2 - 1, player))
                 {
-                    //am.RecordMove(new Move(pos.Item1 - 1, pos.Item2 - 1, player));
-                    SaveBoardHistory();
-                    Console.WriteLine($"Player{player} places at {pos.Item1}, {pos.Item2}");
+                    am.SaveBoardState(gomokuBoard);  // 每次下棋后保存状态
+                    Console.WriteLine($"Player {player} places at {pos.Item1}, {pos.Item2}");
                 }
                 else
                 {
-                    Console.WriteLine("Failed to place move");
-
+                    Console.WriteLine("Failed to place move.");
                 }
+
                 gomokuBoard.PrintBoard(round);
+
                 if (checker.IsDraw(gomokuBoard))
                 {
-
                     ui.DisplayInfo("Game End: Draw!");
                     isGameOver = true;
-
                 }
                 else if (checker.IsWin(gomokuBoard, pos.Item1 - 1, pos.Item2 - 1, player))
                 {
-
-                    Console.WriteLine("Game End: Player{0} Won!", player);
+                    Console.WriteLine($"Game End: Player {player} Won!");
                     isGameOver = true;
-
                 }
+
                 return true;
             }
-            else //invalid
+            else
             {
                 Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
-
                 return false;
             }
+        }
 
+        private void PerformUndoOperation(ref int round)
+        {
+            while (true)
+            {
+                Console.WriteLine("Which round do you want to undo to?");
+                if (int.TryParse(Console.ReadLine(), out int inputRound))
+                {
+                    if (inputRound > 0 && inputRound < round)
+                    {
+                        if (am.Undo(boardHistory, inputRound, gomokuBoard))
+                        {
+                            Console.WriteLine($"Undo to round {inputRound} completed.");
+                            round = inputRound;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: enter a number between 1 and {round - 1}.");
+                    }
+                }
+            }
+        }
 
+        private void PerformLoadOperation(ref int round)
+        {
+            Console.WriteLine("Please enter the FULL PATH to load the game:");
+            try
+            {
+                while (true)
+                {
+                    string savePath = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(savePath) || !File.Exists(savePath))
+                    {
+                        Console.WriteLine("Error: file does not exist!");
+                        continue;
+                    }
+
+                    string jsonStr = File.ReadAllText(savePath);
+                    if (gameType.Equals(GlobalVar.GOMOKU))
+                    {
+                        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                        GomokuBoard loadedBoard = JsonSerializer.Deserialize<GomokuBoard>(jsonStr, options);
+
+                        if (loadedBoard.ValidationStr.Equals(GlobalVar.GOMOKU))
+                        {
+                            gomokuBoard = loadedBoard;
+                            Console.WriteLine("\nLoading Successfully!");
+                            gomokuBoard.PrintBoard(round);
+                            return;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
 
 

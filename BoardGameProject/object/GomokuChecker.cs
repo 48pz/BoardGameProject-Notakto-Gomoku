@@ -21,7 +21,15 @@ namespace BoardGameProject
 
         public bool IsValidPlace(GomokuBoard board, int row, int col)
         {
-            if (board.Cells[row][col] == 0 && row < board.Size && col >= 0 && col < board.Size && row >= 0)
+            if ((row == 996 && col == 996) || // Redo
+                (row == 997 && col == 997) || // Undo
+                (row == 998 && col == 998) || // Load
+                (row == 999 && col == 999))   // Save
+            {
+                return true;  // 允许特殊指令
+            }
+
+            if (row >= 0 && row < board.Size && col >= 0 && col < board.Size && board.Cells[row][col] == 0)
             {
                 return true;
             }
@@ -29,8 +37,8 @@ namespace BoardGameProject
             {
                 return false;
             }
-
         }
+
 
         public bool IsWin(GomokuBoard board, int row, int col, int player)
         {
