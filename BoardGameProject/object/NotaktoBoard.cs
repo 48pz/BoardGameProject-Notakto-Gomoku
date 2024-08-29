@@ -105,7 +105,7 @@ namespace BoardGameProject
                 {
                     for (int j = 0; j < size; j++)
                     {
-                        char symbol = boards[currentBoardIndex][i][j] == 0 ? '.' : 'X';
+                        char symbol = boards[b][i][j] == 0 ? '.' : 'X';
                         Console.Write($"{symbol} ");
                     }
                     Console.WriteLine();
@@ -134,7 +134,7 @@ namespace BoardGameProject
         public bool PlaceChess(int row, int col, int player)
         {
             if (boards[currentBoardIndex][row][col] == 0)
-            { // Check if cell is empty
+            { // Check if board is empty
                 boards[currentBoardIndex][row][col] = player; // Player 1 is 'X', Player 2 is 'O'
                 return true;
             }

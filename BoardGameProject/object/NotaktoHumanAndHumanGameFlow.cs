@@ -54,10 +54,14 @@ namespace BoardGameProject
             notaktoBoard.CurrentPlayer = player;
             if (player == 1)
             {
+                int boardIndex = player1.GetBoardNum();
+                notaktoBoard.SwitchBoard(boardIndex - 1);
                 pos = player1.GetPosition();
             }
             else
             {
+                int boardIndex = player2.GetBoardNum();
+                notaktoBoard.SwitchBoard(boardIndex - 1);
                 pos = player2.GetPosition();
             }
             //save

@@ -29,5 +29,10 @@ namespace BoardGameProject
         {
             throw new NotImplementedException();
         }
+
+        public override int GetBoardNum()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -47,6 +47,7 @@ namespace BoardGameProject
             Console.WriteLine("Game Over... See you next time...");
         }
 
+        private Random random = new Random();
 
         public override bool SelectPosition(ref int player, out bool isGameOver, ref int round)
         {
@@ -54,12 +55,19 @@ namespace BoardGameProject
             bool isValid;
             (int, int) pos;
             notaktoBoard.CurrentPlayer = player;
-            if (player == 1)
+
+            if (player == 1) // AI player
             {
-                pos = player1.GetPosition(notaktoBoard);
+                int boardIndex = random.Next(0, notaktoBoard.Count); // Randomly select a board index
+                notaktoBoard.SwitchBoard(boardIndex); // Switch to the selected board
+
+                pos = player1.GetPosition(notaktoBoard); // AI gets the position based on the selected board
             }
-            else
+            else // Human player
             {
+                int boardIndex = player2.GetBoardNum();
+                notaktoBoard.SwitchBoard(boardIndex - 1); // Switch to the selected board (index is 0-based)
+
                 pos = player2.GetPosition();
             }
             //save
