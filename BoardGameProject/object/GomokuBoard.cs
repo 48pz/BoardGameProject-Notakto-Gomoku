@@ -18,11 +18,7 @@ namespace BoardGameProject
         public int Round
         {
             get { return round; }
-            set
-            {
-
-                round = value;
-            }
+            set { round = value;}
         }
 
 
@@ -109,18 +105,18 @@ namespace BoardGameProject
 
         public List<(int, int)> GetAvaliablePositions()
         {
-            List<(int, int)> AbaliablePos = new List<(int, int)>();
+            List<(int, int)> abaliablePos = new List<(int, int)>();
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
                     if (cells[i][j] == 0)
                     {
-                        AbaliablePos.Add((i, j));
+                        abaliablePos.Add((i, j));
                     }
                 }
             }
-            return AbaliablePos;
+            return abaliablePos;
         }
 
         /// <summary>
