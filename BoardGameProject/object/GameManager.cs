@@ -1,4 +1,4 @@
-
+﻿
 using Newtonsoft.Json;
 using System.Runtime.Intrinsics.X86;
 
@@ -140,12 +140,14 @@ namespace BoardGameProject
                 {
                     ui = new NotaktoUI();
                     gameType = GlobalVar.NOTAKTO;
+                    DisplayNotaktoManual();
                     gameTypeFlag = false;
                 }
                 else if (inputGameType.Equals(GOMOKU_TYPE))
                 {
                     ui = new GomokuUI();
                     gameType = GlobalVar.GOMOKU;
+                    DisplayGomokuManual();
                     gameTypeFlag = false;
 
                 }
@@ -158,8 +160,18 @@ namespace BoardGameProject
                 {
                     Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
                 }
-
             }
+        }
+
+        private void DisplayNotaktoManual()
+        {
+            NotaktoManual manual = new NotaktoManual();
+            manual.DisplayUserManual();
+        }
+        private void DisplayGomokuManual()
+        {
+            GomokuManual manual = new GomokuManual();
+            manual.DisplayUserManual();
         }
 
         //private IBoard LoadGame()
