@@ -26,7 +26,7 @@ namespace BoardGameProject
                 (row == 998 && col == 998) || // Load
                 (row == 999 && col == 999))   // Save
             {
-                return true;  // 允许特殊指令
+                return true;  
             }
 
             if (row >= 0 && row < board.Size && col >= 0 && col < board.Size && board.Cells[row][col] == 0)

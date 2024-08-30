@@ -76,7 +76,7 @@ namespace BoardGameProject
             {
                 pos = player2.GetPosition();
 
-                // 识别特殊指令坐标并处理
+                
                 if (pos == (999, 999))  // Save
                 {
                     string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -134,14 +134,14 @@ namespace BoardGameProject
                 }
             }
 
-            // 常规坐标验证和处理
+            
             bool isValid = checker.IsValidPlace(gomokuBoard, pos.Item1 - 1, pos.Item2 - 1);
 
             if (isValid)
             {
                 if (gomokuBoard.PlaceChess(pos.Item1 - 1, pos.Item2 - 1, player))
                 {
-                    SaveBoardHistory();  // 每次下棋后保存状态
+                    SaveBoardHistory();  
                     Console.WriteLine($"Player {player} places at {pos.Item1}, {pos.Item2}");
                 }
                 else

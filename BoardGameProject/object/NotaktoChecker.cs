@@ -13,7 +13,7 @@ namespace BoardGameProject
         {
             if (board.IsBoardLocked(board.CurrentBoardIndex))
             {
-                return false; // 如果棋盘已被锁定，则该棋盘不再允许放置棋子。
+                return false; 
             }
 
             return row >= 0 && row < board.Size && col >= 0 && col < board.Size && board.Boards[board.CurrentBoardIndex][row][col] == 0;
@@ -21,14 +21,14 @@ namespace BoardGameProject
 
         public bool IsWin(NotaktoBoard board, int row, int col, int player)
         {
-            bool isWin = CheckDirection(board, row, col, player, 1, 0) ||  // 水平
-                         CheckDirection(board, row, col, player, 0, 1) ||  // 垂直
-                         CheckDirection(board, row, col, player, 1, 1) ||  // 主对角线
-                         CheckDirection(board, row, col, player, 1, -1);   // 副对角线
+            bool isWin = CheckDirection(board, row, col, player, 1, 0) ||  
+                         CheckDirection(board, row, col, player, 0, 1) ||  
+                         CheckDirection(board, row, col, player, 1, 1) ||  
+                         CheckDirection(board, row, col, player, 1, -1);   
 
             if (isWin)
             {
-                board.LockBoard(board.CurrentBoardIndex); // 锁定当前棋盘。
+                board.LockBoard(board.CurrentBoardIndex); 
             }
 
             return isWin;

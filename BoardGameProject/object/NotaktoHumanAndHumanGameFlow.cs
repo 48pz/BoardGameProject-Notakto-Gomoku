@@ -70,10 +70,10 @@ namespace BoardGameProject
 
             notaktoBoard.SwitchBoard(boardIndex);
 
-            // 获取位置
+            
             pos = player == 1 ? player1.GetPosition() : player2.GetPosition();
 
-            // 处理保存和加载操作
+            
             if (pos == (999, 999))
             {
                 string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -154,7 +154,7 @@ namespace BoardGameProject
                 return true;
             }
 
-            // 验证位置是否有效
+            
             isValid = checker.IsValidPlace(notaktoBoard, pos.Item1 - 1, pos.Item2 - 1);
 
             if (isValid)
@@ -164,19 +164,19 @@ namespace BoardGameProject
                     SaveBoardHistory();
                     Console.WriteLine($"Player{player} places at {pos.Item1}, {pos.Item2}");
 
-                    // 检查当前棋盘是否有三连线并锁定棋盘
+                    
                     if (checker.IsWin(notaktoBoard, pos.Item1 - 1, pos.Item2 - 1, player))
                     {
-                        notaktoBoard.LockBoard(notaktoBoard.CurrentBoardIndex); // 锁定当前棋盘
+                        notaktoBoard.LockBoard(notaktoBoard.CurrentBoardIndex); 
                         Console.WriteLine($"Board {notaktoBoard.CurrentBoardIndex + 1} is now locked.");
                     }
 
                     notaktoBoard.PrintBoard(round);
 
-                    // 检查是否所有棋盘都被锁定
+                    
                     if (notaktoBoard.AllBoardsLocked())
                     {
-                        int losingPlayer = player; // 最后一个下棋的玩家输
+                        int losingPlayer = player; 
                         Console.WriteLine("Game End: Player{0} Lost!", losingPlayer);
                         isGameOver = true;
                     }

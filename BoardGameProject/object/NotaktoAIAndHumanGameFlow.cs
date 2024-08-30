@@ -61,11 +61,11 @@ namespace BoardGameProject
                 int boardIndex;
                 do
                 {
-                    boardIndex = random.Next(0, notaktoBoard.Count); // 随机选择棋盘索引
-                } while (notaktoBoard.IsBoardLocked(boardIndex)); // 确保未选择被锁定的棋盘
+                    boardIndex = random.Next(0, notaktoBoard.Count); 
+                } while (notaktoBoard.IsBoardLocked(boardIndex)); 
 
-                notaktoBoard.SwitchBoard(boardIndex); // 切换到选定的棋盘
-                pos = player1.GetPosition(notaktoBoard); // AI 获取位置
+                notaktoBoard.SwitchBoard(boardIndex); 
+                pos = player1.GetPosition(notaktoBoard); 
             }
             else // Human player
             {
@@ -73,7 +73,7 @@ namespace BoardGameProject
                 do
                 {
                     Console.WriteLine("Please select a board number:");
-                    boardIndex = player2.GetBoardNum() - 1; // 获取玩家选择的棋盘索引（转换为0基）
+                    boardIndex = player2.GetBoardNum() - 1; 
 
                     if (boardIndex < 0 || boardIndex >= notaktoBoard.Count)
                     {
@@ -84,9 +84,9 @@ namespace BoardGameProject
                     {
                         Console.WriteLine("Error: The selected board is locked. Please choose another board.");
                     }
-                } while (notaktoBoard.IsBoardLocked(boardIndex)); // 确保未选择被锁定的棋盘
+                } while (notaktoBoard.IsBoardLocked(boardIndex)); 
 
-                notaktoBoard.SwitchBoard(boardIndex); // 切换到选定的棋盘
+                notaktoBoard.SwitchBoard(boardIndex); 
                 pos = player2.GetPosition();
             }
 
@@ -185,18 +185,18 @@ namespace BoardGameProject
                     SaveBoardHistory();
                     Console.WriteLine($"Player{player} places at {pos.Item1}, {pos.Item2}");
 
-                    // 新增：检查当前棋盘是否三连成线并锁定
+                    
                     if (checker.IsWin(notaktoBoard, pos.Item1 - 1, pos.Item2 - 1, player))
                     {
-                        notaktoBoard.LockBoard(notaktoBoard.CurrentBoardIndex); // 锁定当前棋盘
+                        notaktoBoard.LockBoard(notaktoBoard.CurrentBoardIndex); 
                         Console.WriteLine($"Board {notaktoBoard.CurrentBoardIndex + 1} is now locked.");
                     }
                     notaktoBoard.PrintBoard(round);
 
-                    // 检查所有棋盘是否都被锁定
+                    
                     if (notaktoBoard.AllBoardsLocked())
                     {
-                        int losingPlayer = player; // 最后一个下棋的玩家输
+                        int losingPlayer = player; 
                         Console.WriteLine("Game End: Player{0} Lost!", losingPlayer);
                         isGameOver = true;
                     }
