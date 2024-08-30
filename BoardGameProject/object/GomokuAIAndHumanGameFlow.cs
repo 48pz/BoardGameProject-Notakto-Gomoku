@@ -82,6 +82,8 @@ namespace BoardGameProject
                     string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     saver.SaveBoardInfo(gomokuBoard, baseDir);
                     Console.WriteLine("Game saved successfully.");
+                    //save then game over;
+                    isGameOver = true;
                     return true;
                 }
                 else if (pos == (998, 998))  // Load
@@ -91,8 +93,44 @@ namespace BoardGameProject
                 }
                 else if (pos == (997, 997))  // Undo
                 {
-                    PerformUndoOperation(ref round);
-                    return true;
+                    while (true)
+                    {
+                        Console.WriteLine("Which round do you want to undo to?");
+                        if (int.TryParse(Console.ReadLine(), out int inputRound))
+                        {
+                            if (inputRound > 0 && inputRound < round)
+                            {
+                                if (am.Undo(boardHistory, inputRound, gomokuBoard))
+                                {
+                                    Console.WriteLine($"Undo to round {inputRound} completed.");
+
+                                    int temp = round;
+                                    round = inputRound;
+                                    //redo
+                                    Console.WriteLine("Confirm undo: enter undo to confirm; enter redo to cancel.");
+                                    (int, int) confirm = player2.GetPosition();
+                                    if (confirm == (996, 996))
+                                    {
+                                        gomokuBoard.Round = temp - 1;
+                                        am.Redo(gomokuBoard);
+                                        return false;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Please enter the position.");
+                                        round++;
+                                        pos = player2.GetPosition();
+                                    }
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Error: enter a number between 1 and {round - 1}.");
+                            }
+                        }
+                    }
+                    //return true;
                 }
             }
 
@@ -133,38 +171,10 @@ namespace BoardGameProject
             }
         }
 
-        private void PerformUndoOperation(ref int round)
-        {
-            while (true)
-            {
-                Console.WriteLine("Which round do you want to undo to?");
-                if (int.TryParse(Console.ReadLine(), out int inputRound))
-                {
-                    if (inputRound > 0 && inputRound < round)
-                    {
-                        if (am.Undo(boardHistory, inputRound, gomokuBoard))
-                        {
-                            Console.WriteLine($"Undo to round {inputRound} completed.");
-                            int temp = round;
-                            round = inputRound;
-                            //redo
-                            Console.WriteLine("Confirm undo: enter undo to confirm; enter redo to cancel.");
-                            (int, int) confirm = player2.GetPosition();
-                            if (confirm == (996, 996))
-                            {
-                                am.Redo(gomokuBoard);
-                                round = temp;
-                            }
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Error: enter a number between 1 and {round - 1}.");
-                    }
-                }
-            }
-        }
+        //private void PerformUndoOperation(ref int round)
+        //{
+
+        //}
 
         private void PerformLoadOperation(ref int round)
         {
@@ -186,12 +196,16 @@ namespace BoardGameProject
                         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                         GomokuBoard loadedBoard = JsonSerializer.Deserialize<GomokuBoard>(jsonStr, options);
 
-                        if (loadedBoard.ValidationStr.Equals(GlobalVar.GOMOKU))
+                        if (loadedBoard.ValidationStr.Equals(GlobalVar.GOMOKU) && loadedBoard.GameMode.Equals(GlobalVar.COMPUTERVSHUMAN))
                         {
                             gomokuBoard = loadedBoard;
                             Console.WriteLine("\nLoading Successfully!");
                             gomokuBoard.PrintBoard(round);
                             return;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error: Wrong file type. Please check the game type and game mode are correct.");
                         }
                     }
                 }

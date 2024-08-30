@@ -66,7 +66,8 @@ namespace BoardGameProject
             if (pos == (999, 999))
             {
                 string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                //save to desktop
+
+                gomokuBoard.Round = round;
                 saver.SaveBoardInfo(gomokuBoard, baseDir);
                 //save then game over;
                 isGameOver = true;
@@ -94,12 +95,17 @@ namespace BoardGameProject
                             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                             GomokuBoard board = JsonSerializer.Deserialize<GomokuBoard>(jsonStr, options);
 
-                            if (board.ValidationStr.Equals(GlobalVar.GOMOKU))
+                            if (board.ValidationStr.Equals(GlobalVar.GOMOKU) && board.GameMode.Equals(GlobalVar.HUMANVSHUMAN))
                             {
                                 gomokuBoard = board;
                                 Console.WriteLine("\nLoading Successfully!");
+                                round = board.Round;
                                 gomokuBoard.PrintBoard(round);
                                 return false;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Error: Wrong file type. Please check the game type and game mode are correct.");
                             }
                         }
                     }
@@ -126,11 +132,22 @@ namespace BoardGameProject
                                 round = inputRound;
                                 //redo
                                 Console.WriteLine("Confirm undo: enter undo to confirm; enter redo to cancel.");
-                                (int, int) confirm = player2.GetPosition();
+                                (int, int) confirm;
+                                confirm =  player ==1? confirm = player1.GetPosition(): confirm = player2.GetPosition();
+                                
+                                
                                 if (confirm == (996, 996))
                                 {
+                                    gomokuBoard.Round = temp - 1;
                                     am.Redo(gomokuBoard);
                                     round = temp;
+                                    return false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Please enter the position.");
+                                    round++;
+                                    pos = player == 1 ? pos = player1.GetPosition() : pos = player2.GetPosition();
                                 }
                                 break;
                             }
@@ -148,7 +165,7 @@ namespace BoardGameProject
 
 
                 }
-                return true;
+                return false;
 
             }
 

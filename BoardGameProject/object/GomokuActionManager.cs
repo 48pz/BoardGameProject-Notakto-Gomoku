@@ -40,7 +40,7 @@ namespace BoardGameProject
                     }
                 }
                 Console.WriteLine("Redo completed");
-                board.PrintBoard(history.Count);
+                board.PrintBoard(board.Round);
                 return true;
             }
             else
