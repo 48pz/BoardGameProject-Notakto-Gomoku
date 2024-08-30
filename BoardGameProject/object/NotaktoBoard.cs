@@ -3,14 +3,15 @@
 
 
 using System.Drawing;
+using System.Text.Json;
 
 namespace BoardGameProject
 {
     public class NotaktoBoard : IBoard
     {
         private List<List<List<int>>> boards;
-        private int count =3; // for Notakto
-        private int size =3;
+        private int count = 3; // for Notakto
+        private int size = 3;
         private int currentBoardIndex = 0; // for Notakto
         private string gameName = GlobalVar.NOTAKTO;
         private string gameMode;
@@ -18,6 +19,8 @@ namespace BoardGameProject
         private readonly string validationStr = GlobalVar.NOTAKTO;
         private int currentPlayer;
         private int round;
+
+        private bool[] isBoardAvailable;
 
         public int Round
         {
@@ -68,11 +71,13 @@ namespace BoardGameProject
         public NotaktoBoard()
         {
             boards = new List<List<List<int>>>(count);
+            isBoardAvailable = new bool[count];
 
             for (int i = 0; i < count; i++)
             {
+                isBoardAvailable[i] = true;
                 var board = new List<List<int>>(size);
-                for (int j= 0; j < size; j++)
+                for (int j = 0; j < size; j++)
                 {
                     board.Add(new List<int>(new int[size]));
                 }
@@ -133,19 +138,45 @@ namespace BoardGameProject
 
         public bool PlaceChess(int row, int col, int player)
         {
-            if (boards[currentBoardIndex][row][col] == -1)
+            // 检查位置是否在有效范围内
+            if (row < 0 || row >= size || col < 0 || col >= size)
             {
-                // This board is locked, cannot place any pieces
-                Console.WriteLine("This board is locked due to a three-in-a-row. Choose another board.");
+                Console.WriteLine("Error: Move is out of bounds.");
                 return false;
             }
 
-            if (boards[currentBoardIndex][row][col] == 0)
+            // 检查位置是否可用并且棋盘没有被锁定
+            if (isBoardAvailable[currentBoardIndex] && boards[currentBoardIndex][row][col] == 0)
             {
-                // Check if the board is empty
-                boards[currentBoardIndex][row][col] = player; // Player 1 is 'X', Player 2 is 'O'
+                boards[currentBoardIndex][row][col] = player;
+
+                if (CheckWinOnBoard(currentBoardIndex))
+                {
+                    isBoardAvailable[currentBoardIndex] = false; // 标记棋盘为不可用
+                    Console.WriteLine($"Board {currentBoardIndex + 1} is now locked.");
+                    return true;
+                }
                 return true;
             }
+            Console.WriteLine("Error: Invalid move. The position is already occupied or the board is locked.");
+            return false;
+        }
+        private bool CheckWinOnBoard(int boardIndex)
+        {
+            var board = boards[boardIndex];
+            // 检查横、竖、斜线的胜利条件
+            for (int i = 0; i < size; i++)
+            {
+                if (board[i][0] != 0 && board[i][0] == board[i][1] && board[i][1] == board[i][2])
+                    return true;
+                if (board[0][i] != 0 && board[0][i] == board[1][i] && board[1][i] == board[2][i])
+                    return true;
+            }
+            if (board[0][0] != 0 && board[0][0] == board[1][1] && board[1][1] == board[2][2])
+                return true;
+            if (board[0][2] != 0 && board[0][2] == board[1][1] && board[1][1] == board[2][0])
+                return true;
+
             return false;
         }
 
@@ -166,22 +197,17 @@ namespace BoardGameProject
 
         public void LockBoard(int boardIndex)
         {
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    boards[boardIndex][i][j] = -1; // 用 -1 表示该棋盘被锁定
-                }
-            }
+            isBoardAvailable[boardIndex] = false;
         }
         public bool IsBoardLocked(int boardIndex)
         {
-            bool isLocked = boards[boardIndex][0][0] == -1;
-            if (isLocked)
-            {
-                Console.WriteLine($"Board {boardIndex + 1} is locked.");
-            }
-            return isLocked;
+            return !isBoardAvailable[boardIndex];
         }
+        public bool AllBoardsLocked()
+        {
+            return !isBoardAvailable.Any(board => board); // 检查所有棋盘是否都被锁定
+        }
+
     }
 }
+

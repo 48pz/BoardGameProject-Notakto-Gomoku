@@ -75,7 +75,12 @@ namespace BoardGameProject
                     Console.WriteLine("Please select a board number:");
                     boardIndex = player2.GetBoardNum() - 1; // 获取玩家选择的棋盘索引（转换为0基）
 
-                    if (notaktoBoard.IsBoardLocked(boardIndex))
+                    if (boardIndex < 0 || boardIndex >= notaktoBoard.Count)
+                    {
+                        Console.WriteLine("Error: Invalid board number. Please select a valid board number.");
+                    }
+
+                    else if (notaktoBoard.IsBoardLocked(boardIndex))
                     {
                         Console.WriteLine("Error: The selected board is locked. Please choose another board.");
                     }
@@ -89,9 +94,7 @@ namespace BoardGameProject
             if (pos == (999, 999))
             {
                 string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                //save to desktop
                 saver.SaveBoardInfo(notaktoBoard, baseDir);
-                //save then game over;
                 isGameOver = true;
                 return true;
             }
@@ -181,27 +184,27 @@ namespace BoardGameProject
                     //am.RecordMove(new Move(pos.Item1 - 1, pos.Item2 - 1, player));
                     SaveBoardHistory();
                     Console.WriteLine($"Player{player} places at {pos.Item1}, {pos.Item2}");
+
+                    // 新增：检查当前棋盘是否三连成线并锁定
+                    if (checker.IsWin(notaktoBoard, pos.Item1 - 1, pos.Item2 - 1, player))
+                    {
+                        notaktoBoard.LockBoard(notaktoBoard.CurrentBoardIndex); // 锁定当前棋盘
+                        Console.WriteLine($"Board {notaktoBoard.CurrentBoardIndex + 1} is now locked.");
+                    }
+                    notaktoBoard.PrintBoard(round);
+
+                    // 检查所有棋盘是否都被锁定
+                    if (notaktoBoard.AllBoardsLocked())
+                    {
+                        int losingPlayer = player; // 最后一个下棋的玩家输
+                        Console.WriteLine("Game End: Player{0} Lost!", losingPlayer);
+                        isGameOver = true;
+                    }
+                    return true;
                 }
                 else
                 {
                     Console.WriteLine("Failed to place move");
-
-                }
-                notaktoBoard.PrintBoard(round);
-                if (checker.IsDraw(notaktoBoard))
-                {
-
-                    ui.DisplayInfo("Game End: Draw!");
-                    isGameOver = true;
-
-                }
-                else if (checker.IsWin(notaktoBoard, pos.Item1 - 1, pos.Item2 - 1, player))
-                {
-                    // The winning player is the opponent
-                    int winningPlayer = player == 1 ? 2 : 1;
-                    // In Notakto, forming a three-in-a-row means losing
-                    Console.WriteLine("Game End: Player{0} Won!", winningPlayer);
-                    isGameOver = true;
 
                 }
                 return true;
@@ -209,7 +212,6 @@ namespace BoardGameProject
             else //invalid
             {
                 Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
-
                 return false;
             }
         }
@@ -240,5 +242,6 @@ namespace BoardGameProject
             }
             boardHistory.Add(currentBoard);
         }
+
     }
 }

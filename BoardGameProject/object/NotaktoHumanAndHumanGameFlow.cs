@@ -56,30 +56,31 @@ namespace BoardGameProject
             int boardIndex;
             do
             {
-                Console.WriteLine("Please select a board number:");
-                boardIndex = player == 1 ? player1.GetBoardNum() - 1 : player2.GetBoardNum() - 1; // 获取玩家选择的棋盘索引
+                boardIndex = player == 1 ? player1.GetBoardNum() - 1 : player2.GetBoardNum() - 1;
 
-                if (notaktoBoard.IsBoardLocked(boardIndex))
+                if (boardIndex < 0 || boardIndex >= notaktoBoard.Count)
+                {
+                    Console.WriteLine("Error: Invalid board number. Please select a valid board number.");
+                }
+                else if (notaktoBoard.IsBoardLocked(boardIndex))
                 {
                     Console.WriteLine("Error: The selected board is locked. Please choose another board.");
                 }
-            } while (notaktoBoard.IsBoardLocked(boardIndex)); // 确保未选择被锁定的棋盘
+            } while (boardIndex < 0 || boardIndex >= notaktoBoard.Count || notaktoBoard.IsBoardLocked(boardIndex));
 
-            notaktoBoard.SwitchBoard(boardIndex); // 切换到选定的棋盘
+            notaktoBoard.SwitchBoard(boardIndex);
+
+            // 获取位置
             pos = player == 1 ? player1.GetPosition() : player2.GetPosition();
 
-
-            //save
+            // 处理保存和加载操作
             if (pos == (999, 999))
             {
                 string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                //save to desktop
                 saver.SaveBoardInfo(notaktoBoard, baseDir);
-                //save then game over;
                 isGameOver = true;
                 return true;
             }
-            //load
             else if (pos == (998, 998))
             {
                 Console.WriteLine("Please enter the FULL PATH to load the game:");
@@ -116,7 +117,6 @@ namespace BoardGameProject
                     Console.WriteLine(e.ToString());
                 }
             }
-            //undo
             else if (pos == (997, 997))
             {
                 while (true)
@@ -131,7 +131,6 @@ namespace BoardGameProject
                             {
                                 int temp = round;
                                 round = inputRound;
-                                //redo
                                 Console.WriteLine("Confirm undo: enter undo to confirm; enter redo to cancel.");
                                 (int, int) confirm = player2.GetPosition();
                                 if (confirm == (996, 996))
@@ -155,47 +154,45 @@ namespace BoardGameProject
                 return true;
             }
 
+            // 验证位置是否有效
             isValid = checker.IsValidPlace(notaktoBoard, pos.Item1 - 1, pos.Item2 - 1);
 
-            //check validity then place chess
-            if (isValid)//input valid
+            if (isValid)
             {
                 if (notaktoBoard.PlaceChess(pos.Item1 - 1, pos.Item2 - 1, player))
                 {
-                    //am.RecordMove(new Move(pos.Item1 - 1, pos.Item2 - 1, player));
                     SaveBoardHistory();
                     Console.WriteLine($"Player{player} places at {pos.Item1}, {pos.Item2}");
+
+                    // 检查当前棋盘是否有三连线并锁定棋盘
+                    if (checker.IsWin(notaktoBoard, pos.Item1 - 1, pos.Item2 - 1, player))
+                    {
+                        notaktoBoard.LockBoard(notaktoBoard.CurrentBoardIndex); // 锁定当前棋盘
+                        Console.WriteLine($"Board {notaktoBoard.CurrentBoardIndex + 1} is now locked.");
+                    }
+
+                    notaktoBoard.PrintBoard(round);
+
+                    // 检查是否所有棋盘都被锁定
+                    if (notaktoBoard.AllBoardsLocked())
+                    {
+                        int losingPlayer = player; // 最后一个下棋的玩家输
+                        Console.WriteLine("Game End: Player{0} Lost!", losingPlayer);
+                        isGameOver = true;
+                    }
+                    return true;
                 }
                 else
                 {
                     Console.WriteLine("Failed to place move");
-
                 }
-                notaktoBoard.PrintBoard(round);
-                if (checker.IsDraw(notaktoBoard))
-                {
-
-                    ui.DisplayInfo("Game End: Draw!");
-                    isGameOver = true;
-
-                }
-                else if (checker.IsWin(notaktoBoard, pos.Item1 - 1, pos.Item2 - 1, player))
-                {
-                    // The winning player is the opponent
-                    int winningPlayer = player == 1 ? 2 : 1;
-                    // In Notakto, forming a three-in-a-row means losing
-                    Console.WriteLine("Game End: Player{0} Won!", winningPlayer);
-                    isGameOver = true;
-
-                }
-                return true;
             }
-            else //invalid
+            else
             {
                 Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
-
                 return false;
             }
+            return false;
         }
 
         public override void SetUp()
