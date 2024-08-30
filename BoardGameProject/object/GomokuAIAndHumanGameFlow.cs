@@ -94,11 +94,6 @@ namespace BoardGameProject
                     PerformUndoOperation(ref round);
                     return true;
                 }
-                else if (pos == (996, 996))  // Redo
-                {
-                    am.Redo(gomokuBoard);
-                    return true;
-                }
             }
 
             // 常规坐标验证和处理
@@ -108,7 +103,7 @@ namespace BoardGameProject
             {
                 if (gomokuBoard.PlaceChess(pos.Item1 - 1, pos.Item2 - 1, player))
                 {
-                    am.SaveBoardState(gomokuBoard);  // 每次下棋后保存状态
+                    SaveBoardHistory();  // 每次下棋后保存状态
                     Console.WriteLine($"Player {player} places at {pos.Item1}, {pos.Item2}");
                 }
                 else
@@ -150,7 +145,16 @@ namespace BoardGameProject
                         if (am.Undo(boardHistory, inputRound, gomokuBoard))
                         {
                             Console.WriteLine($"Undo to round {inputRound} completed.");
+                            int temp = round;
                             round = inputRound;
+                            //redo
+                            Console.WriteLine("Confirm undo: enter undo to confirm; enter redo to cancel.");
+                            (int, int) confirm = player2.GetPosition();
+                            if (confirm == (996, 996))
+                            {
+                                am.Redo(gomokuBoard);
+                                round = temp;
+                            }
                             break;
                         }
                     }
