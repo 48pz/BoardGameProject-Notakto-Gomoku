@@ -11,6 +11,5 @@ namespace BoardGameProject
     {
         HumanVSHuman = 1,
         ComputerVSHuman = 2
-
     }
 }

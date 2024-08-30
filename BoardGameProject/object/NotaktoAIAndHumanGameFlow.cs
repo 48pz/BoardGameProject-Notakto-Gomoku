@@ -58,18 +58,33 @@ namespace BoardGameProject
 
             if (player == 1) // AI player
             {
-                int boardIndex = random.Next(0, notaktoBoard.Count); // Randomly select a board index
-                notaktoBoard.SwitchBoard(boardIndex); // Switch to the selected board
+                int boardIndex;
+                do
+                {
+                    boardIndex = random.Next(0, notaktoBoard.Count); // 随机选择棋盘索引
+                } while (notaktoBoard.IsBoardLocked(boardIndex)); // 确保未选择被锁定的棋盘
 
-                pos = player1.GetPosition(notaktoBoard); // AI gets the position based on the selected board
+                notaktoBoard.SwitchBoard(boardIndex); // 切换到选定的棋盘
+                pos = player1.GetPosition(notaktoBoard); // AI 获取位置
             }
             else // Human player
             {
-                int boardIndex = player2.GetBoardNum();
-                notaktoBoard.SwitchBoard(boardIndex - 1); // Switch to the selected board (index is 0-based)
+                int boardIndex;
+                do
+                {
+                    Console.WriteLine("Please select a board number:");
+                    boardIndex = player2.GetBoardNum() - 1; // 获取玩家选择的棋盘索引（转换为0基）
 
+                    if (notaktoBoard.IsBoardLocked(boardIndex))
+                    {
+                        Console.WriteLine("Error: The selected board is locked. Please choose another board.");
+                    }
+                } while (notaktoBoard.IsBoardLocked(boardIndex)); // 确保未选择被锁定的棋盘
+
+                notaktoBoard.SwitchBoard(boardIndex); // 切换到选定的棋盘
                 pos = player2.GetPosition();
             }
+
             //save
             if (pos == (999, 999))
             {

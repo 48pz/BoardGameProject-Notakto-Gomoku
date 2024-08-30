@@ -52,18 +52,23 @@ namespace BoardGameProject
             bool isValid;
             (int, int) pos;
             notaktoBoard.CurrentPlayer = player;
-            if (player == 1)
+
+            int boardIndex;
+            do
             {
-                int boardIndex = player1.GetBoardNum();
-                notaktoBoard.SwitchBoard(boardIndex - 1);
-                pos = player1.GetPosition();
-            }
-            else
-            {
-                int boardIndex = player2.GetBoardNum();
-                notaktoBoard.SwitchBoard(boardIndex - 1);
-                pos = player2.GetPosition();
-            }
+                Console.WriteLine("Please select a board number:");
+                boardIndex = player == 1 ? player1.GetBoardNum() - 1 : player2.GetBoardNum() - 1; // 获取玩家选择的棋盘索引
+
+                if (notaktoBoard.IsBoardLocked(boardIndex))
+                {
+                    Console.WriteLine("Error: The selected board is locked. Please choose another board.");
+                }
+            } while (notaktoBoard.IsBoardLocked(boardIndex)); // 确保未选择被锁定的棋盘
+
+            notaktoBoard.SwitchBoard(boardIndex); // 切换到选定的棋盘
+            pos = player == 1 ? player1.GetPosition() : player2.GetPosition();
+
+
             //save
             if (pos == (999, 999))
             {

@@ -133,8 +133,16 @@ namespace BoardGameProject
 
         public bool PlaceChess(int row, int col, int player)
         {
+            if (boards[currentBoardIndex][row][col] == -1)
+            {
+                // This board is locked, cannot place any pieces
+                Console.WriteLine("This board is locked due to a three-in-a-row. Choose another board.");
+                return false;
+            }
+
             if (boards[currentBoardIndex][row][col] == 0)
-            { // Check if board is empty
+            {
+                // Check if the board is empty
                 boards[currentBoardIndex][row][col] = player; // Player 1 is 'X', Player 2 is 'O'
                 return true;
             }
@@ -143,7 +151,6 @@ namespace BoardGameProject
 
         /// <summary>
         /// Switch to the specified chessboard
-        /// </summary>
         /// <param name="index"></param>
         public void SwitchBoard(int index)
         {
@@ -156,6 +163,25 @@ namespace BoardGameProject
                 throw new ArgumentOutOfRangeException("Invalid board index.");
             }
         }
-    }
 
+        public void LockBoard(int boardIndex)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    boards[boardIndex][i][j] = -1; // 用 -1 表示该棋盘被锁定
+                }
+            }
+        }
+        public bool IsBoardLocked(int boardIndex)
+        {
+            bool isLocked = boards[boardIndex][0][0] == -1;
+            if (isLocked)
+            {
+                Console.WriteLine($"Board {boardIndex + 1} is locked.");
+            }
+            return isLocked;
+        }
+    }
 }

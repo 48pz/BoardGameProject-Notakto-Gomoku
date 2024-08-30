@@ -5,41 +5,33 @@ namespace BoardGameProject
     {
         public bool IsDraw(NotaktoBoard board)
         {
-            // Check if all boards have a triple 'X'
-            for (int b = 0; b < board.Boards.Count; b++)
-            {
-                for (int i = 0; i < board.Size; i++)
-                {
-                    for (int j = 0; j < board.Size; j++)
-                    {
-                        // As long as there is an empty space on one board, it is not a draw
-                        if (board.Boards[b][i][j] == 0) return false;
-                    }
-                }
-                return true;
-            }
-            // All boards are full
+            // Not applicable for Notakto.
             return false;
         }
 
         public bool IsValidPlace(NotaktoBoard board, int row, int col)
         {
+            if (board.IsBoardLocked(board.CurrentBoardIndex))
             {
-                if (row >= 0 && row < board.Size && col >= 0 && col < board.Size)
-                {
-                    return board.Boards[board.CurrentBoardIndex][row][col] == 0;
-                }
-                return false;
-             }
+                return false; // 如果棋盘已被锁定，则该棋盘不再允许放置棋子。
+            }
+
+            return row >= 0 && row < board.Size && col >= 0 && col < board.Size && board.Boards[board.CurrentBoardIndex][row][col] == 0;
         }
 
         public bool IsWin(NotaktoBoard board, int row, int col, int player)
         {
-            // Check if the current player has formed a triple on the current board
-            return CheckDirection(board, row, col, player, 1, 0) ||
-                   CheckDirection(board, row, col, player, 0, 1) ||
-                   CheckDirection(board, row, col, player, 1, 1) ||
-                   CheckDirection(board, row, col, player, 1, -1);
+            bool isWin = CheckDirection(board, row, col, player, 1, 0) ||  // 水平
+                         CheckDirection(board, row, col, player, 0, 1) ||  // 垂直
+                         CheckDirection(board, row, col, player, 1, 1) ||  // 主对角线
+                         CheckDirection(board, row, col, player, 1, -1);   // 副对角线
+
+            if (isWin)
+            {
+                board.LockBoard(board.CurrentBoardIndex); // 锁定当前棋盘。
+            }
+
+            return isWin;
         }
 
         private bool CheckDirection(NotaktoBoard board, int row, int col, int player, int v1, int v2)
