@@ -198,6 +198,7 @@ namespace BoardGameProject
         public void LockBoard(int boardIndex)
         {
             isBoardAvailable[boardIndex] = false;
+            Console.WriteLine($"Board {boardIndex + 1} is now locked.");
         }
         public bool IsBoardLocked(int boardIndex)
         {
