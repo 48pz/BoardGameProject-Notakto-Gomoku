@@ -1,10 +1,4 @@
-﻿
-
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
-
-namespace BoardGameProject
+﻿namespace BoardGameProject
 {
     public class NotaktoAIAndHumanGameFlow : GameFlowBase
     {
@@ -50,6 +44,8 @@ namespace BoardGameProject
         public override void End()
         {
             Console.WriteLine("Game Over... See you next time...");
+            Console.WriteLine("\nPress any key to exit...");
+            Console.ReadKey(); 
         }
 
         public override void SetUp()
@@ -117,7 +113,6 @@ namespace BoardGameProject
                     string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     saver.SaveBoardInfo(boardList, baseDir);
                     Console.WriteLine("Game saved successfully.");
-                    isGameOver = true;
                     return true;
                 }
                 else if (cmd.Equals(Command.load))  // Load

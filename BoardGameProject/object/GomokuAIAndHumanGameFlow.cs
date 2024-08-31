@@ -69,6 +69,8 @@ namespace BoardGameProject
         public override void End()
         {
             Console.WriteLine("Game Over... See you next time...");
+            Console.WriteLine("\nPress any key to exit...");
+            Console.ReadKey();
         }
 
         public override bool SelectPosition(ref int player, out bool isGameOver, ref int round)
