@@ -138,6 +138,11 @@
                     manual.DisplayUserManual();
                     return false;
                 }
+                else if (cmd.Equals(Command.quit))
+                {
+                    isGameOver = true;
+                    return true;
+                }
                 else if (cmd.Equals(Command.load))  // Load
                 {
                     boardList = saver.LoadGame();

@@ -35,9 +35,15 @@
                 {
                     return new List<int> { (int)Command.redo };
                 }
+                //help
                 else if (inputs.Equals(GlobalVar.HELP))
                 {
                     return new List<int> { (int)Command.help };
+                }
+                //quit
+                else if (inputs.Equals(GlobalVar.QUIT))
+                {
+                    return new List<int> { (int)Command.quit };
                 }
 
                 string[] pos = inputs.Split(' ');

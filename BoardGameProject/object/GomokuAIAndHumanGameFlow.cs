@@ -125,6 +125,11 @@ namespace BoardGameProject
                     manual.DisplayUserManual();
                     return false;
                 }
+                else if (pos == (994, 994))//quit
+                {
+                    isGameOver = true;
+                    return true;
+                }
                 else if (pos == (997, 997))  // Undo
                 {
                     while (true)

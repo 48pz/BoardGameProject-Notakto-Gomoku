@@ -23,7 +23,7 @@ namespace BoardGameProject
                     boards.Add(new NotaktoBoard(3));
                 }
                 return boards;
-            }
+            } 
 
             else
             {

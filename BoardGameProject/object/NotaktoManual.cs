@@ -35,7 +35,9 @@ namespace BoardGameProject
             Console.WriteLine("{4.3Enter \"undo\"}: enter the number of rounds, and perform the operation of undoing to a certain round (previous).");
             Console.WriteLine("{4.4Enter \"redo\"}: the undo operation will be confirmed after the undo operation is completed,");
             Console.WriteLine("and entering \"redo\" will cancel the undo operation.");
-            Console.WriteLine("{4.5Enter \"help\"}: display this manual again.\n");
+            Console.WriteLine("{4.5Enter \"help\"}: display this manual again.");
+            Console.WriteLine("{4.6Enter \"quit\"}: Exit Game.\n");
+
 
         }
     }

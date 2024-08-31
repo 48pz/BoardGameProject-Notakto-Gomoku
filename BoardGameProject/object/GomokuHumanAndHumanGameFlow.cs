@@ -93,6 +93,11 @@ namespace BoardGameProject
                 manual.DisplayUserManual();
                 return false;
             }
+            else if (pos == (994, 994))//quit
+            {
+                isGameOver = true;
+                return true;
+            }
             //load
             else if (pos == (998, 998))
             {

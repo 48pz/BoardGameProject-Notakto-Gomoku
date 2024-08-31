@@ -22,6 +22,7 @@ namespace BoardGameProject
         load = 998,
         undo = 997,
         redo = 996,
-        help = 995
+        help = 995,
+        quit = 994
     }
 }
