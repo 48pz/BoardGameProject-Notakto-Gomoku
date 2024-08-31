@@ -2,6 +2,9 @@
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// interface for chess board
+    /// </summary>
     public interface IBoard
     {
         int Size { get; }

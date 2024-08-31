@@ -2,6 +2,9 @@
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// notakto redo and undo class
+    /// </summary>
     public class NotaktoActionManager : IActionManager<NotaktoBoard>
     {
         private Stack<List<int[,]>> redoStack = new Stack<List<int[,]>>();
@@ -10,16 +13,10 @@ namespace BoardGameProject
             redoStack.Clear();
         }
 
-        public bool Redo(NotaktoBoard board)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveBoardState(NotaktoBoard board)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// redo
+        /// </summary>
+        /// <returns></returns>
         public List<NotaktoBoard> Redo()
         {
             if (redoStack.Count == 0)
@@ -67,7 +64,7 @@ namespace BoardGameProject
             List<NotaktoBoard> boards = new List<NotaktoBoard>();
 
             List<int[,]> currentBoardState = new List<int[,]>();
-            foreach (var board in boardsHistory[boardsHistory.Count - 1]) // 获取当前最新的棋盘状态
+            foreach (var board in boardsHistory[boardsHistory.Count - 1]) 
             {
                 int size = board.GetLength(0);
                 int[,] boardCopy = new int[size, size];
@@ -97,6 +94,14 @@ namespace BoardGameProject
 
 
         public bool Undo(List<int[,]> history, int targetRound, NotaktoBoard board)
+        {
+            throw new NotImplementedException();
+        }
+        public bool Redo(NotaktoBoard board)
+        {
+            throw new NotImplementedException();
+        }
+        public void SaveBoardState(NotaktoBoard board)
         {
             throw new NotImplementedException();
         }

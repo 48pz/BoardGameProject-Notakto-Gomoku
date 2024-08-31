@@ -1,9 +1,12 @@
 ﻿
 namespace BoardGameProject
 {
+    /// <summary>
+    /// interface for checker
+    /// </summary>
+    /// <typeparam name="TBoard"></typeparam>
     public interface IChecker<TBoard>
     {
-
 
         bool IsValidPlace(TBoard board, int row, int col);
         bool IsWin(TBoard board, int row, int col, int player);

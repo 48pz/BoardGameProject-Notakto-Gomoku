@@ -1,6 +1,9 @@
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// global variable string
+    /// </summary>
     public class GlobalVar
     {
         public const string QUIT = "quit";

@@ -1,15 +1,16 @@
-﻿using System.Text.Json.Serialization;
-
+﻿
 namespace BoardGameProject
 {
-
+    /// <summary>
+    /// gomoku board class
+    /// </summary>
     public class GomokuBoard : IBoard
     {
         private List<List<int>> cells; 
         private int size;
         private string gameName = GlobalVar.GOMOKU;
         private string gameMode;
-        //Used to verify loading file
+        //to verify loading file
         private readonly string validationStr = GlobalVar.GOMOKU;
         private int currentPlayer;
         private int round;
@@ -102,7 +103,10 @@ namespace BoardGameProject
 
         }
 
-
+        /// <summary>
+        /// get empty positions
+        /// </summary>
+        /// <returns></returns>
         public List<(int, int)> GetAvaliablePositions()
         {
             List<(int, int)> abaliablePos = new List<(int, int)>();
@@ -120,7 +124,7 @@ namespace BoardGameProject
         }
 
         /// <summary>
-        /// 
+        /// place chess
         /// </summary>
         /// <param name="row"></param>
         /// <param name="col"></param>

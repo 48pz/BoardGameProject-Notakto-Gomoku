@@ -2,6 +2,9 @@
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// gomoku manual class
+    /// </summary>
     public class GomokuManual : IHelpSystem
     {
         public void DisplayUserManual()

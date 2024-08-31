@@ -1,5 +1,8 @@
 ﻿namespace BoardGameProject
 {
+    /// <summary>
+    /// notakto human vs. human game flow class
+    /// </summary>
     internal class NotaktoHumanAndHumanGameFlow : GameFlowBase
     {
         private string gameType;
@@ -42,6 +45,9 @@
         private NotaktoActionManager am;
         private List<List<int[,]>> boardsHistory = new List<List<int[,]>>();
 
+        /// <summary>
+        /// after game over
+        /// </summary>
         public override void End()
         {
             Console.WriteLine("Game Over... See you next time...");
@@ -49,7 +55,13 @@
             Console.ReadKey();
         }
 
-
+        /// <summary>
+        /// main operations
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="isGameOver"></param>
+        /// <param name="round"></param>
+        /// <returns></returns>
         public override bool SelectPosition(ref int player, out bool isGameOver, ref int round)
         {
             isGameOver = false;
@@ -171,6 +183,10 @@
 
         }
 
+        /// <summary>
+        /// print all of boards
+        /// </summary>
+        /// <param name="round"></param>
         private void PrintBoardList(int round)
         {
             for (int i = 1; i <= boardList.Count; i++)
@@ -183,6 +199,9 @@
             }
         }
 
+        /// <summary>
+        /// save history
+        /// </summary>
         private void SaveBoardHistory()
         {
             List<int[,]> currentBoardsState = new List<int[,]>();
@@ -206,6 +225,13 @@
             boardsHistory.Add(currentBoardsState);
         }
 
+        /// <summary>
+        /// allocate a board for chess play
+        /// </summary>
+        /// <param name="boardList"></param>
+        /// <param name="pos"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
         public bool PlaceChess(List<NotaktoBoard> boardList, List<int> pos, int player)
         {
             int boardIndex = pos[0] - 1;
@@ -223,6 +249,10 @@
             return selectedBoard.PlaceChess(row, col, player);
         }
 
+
+        /// <summary>
+        /// initialisation
+        /// </summary>
         public override void SetUp()
         {
             var boards = BoardFactory.CreateBoard(GlobalVar.NOTAKTO);
@@ -264,7 +294,5 @@
             am = new NotaktoActionManager();
 
         }
-
-        
     }
 }

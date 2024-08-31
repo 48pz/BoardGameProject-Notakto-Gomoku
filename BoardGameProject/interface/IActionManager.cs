@@ -2,6 +2,10 @@
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// interface to undo and redo
+    /// </summary>
+    /// <typeparam name="TBoard"></typeparam>
     public interface IActionManager<TBoard>
     {
         void SaveBoardState(TBoard board);

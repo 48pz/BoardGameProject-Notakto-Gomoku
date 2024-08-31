@@ -3,6 +3,9 @@ using System.Text.Json;
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// Gomoku, Computer vs. human game flow
+    /// </summary>
     public class GomokuAIAndHumanGameFlow : GameFlowBase
     {
         private string gameType;
@@ -42,7 +45,9 @@ namespace BoardGameProject
         private GomokuActionManager am;
         private List<int[,]> boardHistory = new List<int[,]>();
 
-
+        /// <summary>
+        /// initialisation
+        /// </summary>
         public override void SetUp()
         {
             var boards = BoardFactory.CreateBoard(GlobalVar.GOMOKU);
@@ -66,6 +71,9 @@ namespace BoardGameProject
             am = new GomokuActionManager();
         }
 
+        /// <summary>
+        /// after game over
+        /// </summary>
         public override void End()
         {
             Console.WriteLine("Game Over... See you next time...");
@@ -73,6 +81,14 @@ namespace BoardGameProject
             Console.ReadKey();
         }
 
+
+        /// <summary>
+        /// main operation
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="isGameOver"></param>
+        /// <param name="round"></param>
+        /// <returns></returns>
         public override bool SelectPosition(ref int player, out bool isGameOver, ref int round)
         {
             isGameOver = false;
@@ -181,11 +197,11 @@ namespace BoardGameProject
             }
         }
 
-        //private void PerformUndoOperation(ref int round)
-        //{
 
-        //}
-
+        /// <summary>
+        /// load
+        /// </summary>
+        /// <param name="round"></param>
         private void PerformLoadOperation(ref int round)
         {
             Console.WriteLine("Please enter the FULL PATH to load the game:");
@@ -226,7 +242,9 @@ namespace BoardGameProject
             }
         }
 
-
+        /// <summary>
+        /// save history
+        /// </summary>
         public void SaveBoardHistory()
         {
             int[,] currentBoard = new int[gomokuBoard.Size, gomokuBoard.Size];

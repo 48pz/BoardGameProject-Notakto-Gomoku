@@ -1,6 +1,9 @@
 ﻿
 namespace BoardGameProject
 {
+    /// <summary>
+    /// notakto help system
+    /// </summary>
     public class NotaktoManual : IHelpSystem
     {
         public void DisplayUserManual()

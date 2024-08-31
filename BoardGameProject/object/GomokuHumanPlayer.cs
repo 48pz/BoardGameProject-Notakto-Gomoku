@@ -2,6 +2,9 @@
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// gomoku human player class
+    /// </summary>
     public class GomokuHumanPlayer : GomokuPlayerBase
     {
         private string _currentInputs;
@@ -11,8 +14,11 @@ namespace BoardGameProject
             set { _currentInputs = value; }
         }
 
-
-
+        /// <summary>
+        /// Handling input operations
+        /// </summary>
+        /// <param name="board"></param>
+        /// <returns></returns>
         public override (int, int) GetPosition(IBoard board = null)
         {
             while (true)
@@ -61,21 +67,5 @@ namespace BoardGameProject
             }
 
         }
-
-        public override void PassPosition()
-        {
-            throw new NotImplementedException();
-        }
-
-        //public override int GetBoardNum() // for Notakto
-        //{
-        //    int boardIndex;
-        //    Console.WriteLine("Enter the board number (1-3): ");
-        //    while (!int.TryParse(Console.ReadLine(), out boardIndex) || boardIndex < 1 || boardIndex > 3)
-        //    {
-        //        Console.WriteLine("Invalid board number. Please enter a number between 1 and 3:");
-        //    }
-        //    return boardIndex;
-        //}
     }
 }

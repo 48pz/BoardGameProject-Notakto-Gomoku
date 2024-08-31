@@ -2,18 +2,23 @@
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// Gomoku undo and redo
+    /// </summary>
     public class GomokuActionManager : IActionManager<GomokuBoard>
     {
         private Stack<int[,]> redoStack = new Stack<int[,]>();
-
 
         public void Clear()
         {
             redoStack.Clear();
         }
 
-
-
+        /// <summary>
+        /// redo 
+        /// </summary>
+        /// <param name="board"></param>
+        /// <returns></returns>
         public bool Redo(GomokuBoard board)
         {
             if (redoStack.Count > 0)
@@ -37,16 +42,13 @@ namespace BoardGameProject
             }
         }
 
-        public List<NotaktoBoard> Redo()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveBoardState(GomokuBoard board)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// undo to target round
+        /// </summary>
+        /// <param name="history"></param>
+        /// <param name="targetRound"></param>
+        /// <param name="board"></param>
+        /// <returns></returns>
         public bool Undo(List<int[,]> history, int targetRound, GomokuBoard board)
         {
             if (targetRound > 0 && targetRound < history.Count)
@@ -82,5 +84,15 @@ namespace BoardGameProject
             }
 
         }
+
+        public List<NotaktoBoard> Redo()
+        {
+            throw new NotImplementedException();
+        }
+        public void SaveBoardState(GomokuBoard board)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

@@ -2,8 +2,11 @@
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// notakto player factory: factory pattern
+    /// </summary>
     public class NotaktoPlayerFactory
-{
+    {
         public static NotaktoPlayerBase CreatePlayer(string playerType)
         {
 
@@ -16,7 +19,6 @@ namespace BoardGameProject
                 default:
                     throw new ArgumentException("Invalid player type");
             }
-
         }
     }
 }

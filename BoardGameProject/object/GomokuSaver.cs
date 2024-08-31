@@ -3,6 +3,9 @@ using System.Text.Json;
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// gomoku saver
+    /// </summary>
     public class GomokuSaver : ISaver<GomokuBoard>
     {
         /// <summary>

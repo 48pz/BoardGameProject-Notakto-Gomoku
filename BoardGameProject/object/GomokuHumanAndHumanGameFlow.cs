@@ -4,6 +4,9 @@ using System.Text.Json;
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// gomoku human vs. human game flow class
+    /// </summary>
     public class GomokuHumanAndHumanGameFlow : GameFlowBase
     {
 
@@ -43,6 +46,9 @@ namespace BoardGameProject
         private GomokuActionManager am;
         private List<int[,]> boardHistory = new List<int[,]>();
 
+        /// <summary>
+        /// after game over
+        /// </summary>
         public override void End()
         {
             Console.WriteLine("Game Over... See you next time...");
@@ -50,6 +56,13 @@ namespace BoardGameProject
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// main operations
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="isGameOver"></param>
+        /// <param name="round"></param>
+        /// <returns></returns>
         public override bool SelectPosition(ref int player, out bool isGameOver, ref int round)
         {
             isGameOver = false;
@@ -71,7 +84,7 @@ namespace BoardGameProject
 
                 gomokuBoard.Round = round;
                 saver.SaveBoardInfo(gomokuBoard, baseDir);
-               
+
                 return true;
             }
             //load
@@ -134,9 +147,9 @@ namespace BoardGameProject
                                 //redo
                                 Console.WriteLine("Confirm undo: enter undo to confirm; enter redo to cancel.");
                                 (int, int) confirm;
-                                confirm =  player ==1? confirm = player1.GetPosition(): confirm = player2.GetPosition();
-                                
-                                
+                                confirm = player == 1 ? confirm = player1.GetPosition() : confirm = player2.GetPosition();
+
+
                                 if (confirm == (996, 996))
                                 {
                                     gomokuBoard.Round = temp - 1;
@@ -215,6 +228,10 @@ namespace BoardGameProject
 
         }
 
+
+        /// <summary>
+        /// initialisation
+        /// </summary>
         public override void SetUp()
         {
             var boards = BoardFactory.CreateBoard(GlobalVar.GOMOKU);
@@ -239,6 +256,9 @@ namespace BoardGameProject
             am = new GomokuActionManager();
         }
 
+        /// <summary>
+        /// save history
+        /// </summary>
         public void SaveBoardHistory()
         {
             int[,] currentBoard = new int[gomokuBoard.Size, gomokuBoard.Size];

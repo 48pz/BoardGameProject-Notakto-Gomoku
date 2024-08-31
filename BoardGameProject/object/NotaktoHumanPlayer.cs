@@ -1,7 +1,15 @@
 ﻿namespace BoardGameProject
 {
+    /// <summary>
+    /// notakto human player class
+    /// </summary>
     public class NotaktoHumanPlayer : NotaktoPlayerBase
     {
+        /// <summary>
+        /// Handling input operations
+        /// </summary>
+        /// <param name="boards"></param>
+        /// <returns></returns>
         public override List<int> GetPosition(List<NotaktoBoard> boards)
         {
             while (true)

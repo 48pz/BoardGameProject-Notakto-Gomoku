@@ -3,6 +3,9 @@ namespace BoardGameProject
     public class UIUtils
     {
 
+        /// <summary>
+        /// dispaly game mode
+        /// </summary>
         public static void DisplayGameMode()
         {
             int width = 55;

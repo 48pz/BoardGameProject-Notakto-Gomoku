@@ -1,12 +1,19 @@
 ﻿
-using System;
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// gomoku ai player class
+    /// </summary>
     public class GomokuComputerPlayer : GomokuPlayerBase
     {
         private Random random = new Random();
 
+        /// <summary>
+        /// get random position
+        /// </summary>
+        /// <param name="board"></param>
+        /// <returns></returns>
         public override (int, int) GetPosition(IBoard board)
         {
             var avaliablePos = board.GetAvaliablePositions();
@@ -18,17 +25,10 @@ namespace BoardGameProject
             }
             else
             {
-
                 //Console.WriteLine("No empty positions available."); end game
+                return (0, 0);
             }
-
-            return (0, 0);
+            
         }
-
-        public override void PassPosition()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

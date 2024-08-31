@@ -1,7 +1,15 @@
 ﻿namespace BoardGameProject
 {
+    /// <summary>
+    /// notakto computer player class
+    /// </summary>
     public class NotaktoComputerPlayer : NotaktoPlayerBase
     {
+        /// <summary>
+        /// get position randomly
+        /// </summary>
+        /// <param name="boards"></param>
+        /// <returns></returns>
         public override List<int> GetPosition(List<NotaktoBoard> boards)
         {
             List<(int boardIndex, int row, int col)> availablePos = new List<(int boardIndex, int row, int col)>();

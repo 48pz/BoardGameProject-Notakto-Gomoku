@@ -1,9 +1,10 @@
 
 
-using System;
-
 namespace BoardGameProject
 {
+    /// <summary>
+    /// gomoku ui class
+    /// </summary>
     public class GomokuUI : UIBase
     {
         public override void DisplayGameMode()
@@ -11,19 +12,11 @@ namespace BoardGameProject
             UIUtils.DisplayGameMode();
         }
 
-        public override string PassInfoToGameManager()
-        {
-            throw new NotImplementedException();
-        }
-
-
         public override void DisplayInfo(string info)
         {
             Console.WriteLine(info);
         }
 
-
-  
 
     }
 }

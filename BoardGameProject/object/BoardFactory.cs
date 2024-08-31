@@ -8,7 +8,7 @@ namespace BoardGameProject
     {
         public static List<IBoard> CreateBoard(string gameType)
         {
-           
+
             if (gameType == GlobalVar.GOMOKU)
             {
                 List<IBoard> boards = new List<IBoard>();

@@ -1,5 +1,8 @@
 ﻿namespace BoardGameProject
 {
+    /// <summary>
+    /// notakto computer vs. human game flow class
+    /// </summary>
     public class NotaktoAIAndHumanGameFlow : GameFlowBase
     {
         private string gameType;
@@ -41,6 +44,9 @@
         private NotaktoActionManager am;
         private List<List<int[,]>> boardsHistory = new List<List<int[,]>>();
 
+        /// <summary>
+        /// after gameover
+        /// </summary>
         public override void End()
         {
             Console.WriteLine("Game Over... See you next time...");
@@ -48,6 +54,9 @@
             Console.ReadKey(); 
         }
 
+        /// <summary>
+        /// main operations
+        /// </summary>
         public override void SetUp()
         {
             var boards = BoardFactory.CreateBoard(GlobalVar.NOTAKTO);
@@ -89,6 +98,13 @@
             am = new NotaktoActionManager();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="isGameOver"></param>
+        /// <param name="round"></param>
+        /// <returns></returns>
         public override bool SelectPosition(ref int player, out bool isGameOver, ref int round)
         {
             isGameOver = false;
@@ -163,9 +179,6 @@
                             Console.WriteLine($"Error: enter a number between 1 and {round - 1}.");
                         }
                     }
-
-
-
                 }
             }
 
@@ -213,6 +226,11 @@
 
         }
 
+
+        /// <summary>
+        /// print all of boards
+        /// </summary>
+        /// <param name="round"></param>
         private void PrintBoardList(int round)
         {
             for (int i = 1; i <= boardList.Count; i++)

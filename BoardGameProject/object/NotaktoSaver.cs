@@ -1,10 +1,11 @@
 ﻿
-
-using System.Security.AccessControl;
 using System.Text.Json;
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// notakto saver
+    /// </summary>
     public class NotaktoSaver : ISaver<NotaktoBoard>
     {
         /// <summary>

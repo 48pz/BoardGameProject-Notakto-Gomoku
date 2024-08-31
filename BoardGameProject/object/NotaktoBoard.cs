@@ -2,6 +2,9 @@
 
 namespace BoardGameProject
 {
+    /// <summary>
+    /// notakto board class
+    /// </summary>
     public class NotaktoBoard : IBoard
     {
 
@@ -125,6 +128,10 @@ namespace BoardGameProject
             return false;
         }
 
+        /// <summary>
+        /// get empty positions
+        /// </summary>
+        /// <returns></returns>
         public List<(int, int)> GetAvaliablePositions()
         {
             List<(int, int)> emptyPositions = new List<(int, int)>();

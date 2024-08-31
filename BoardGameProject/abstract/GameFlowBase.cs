@@ -33,8 +33,6 @@
 
         }
 
-
-
         public abstract void SetUp();
         public abstract bool SelectPosition(ref int player, out bool isGameOver, ref int round);
         public abstract void End();
