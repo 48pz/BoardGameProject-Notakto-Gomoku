@@ -3,7 +3,7 @@ using System;
 
 namespace BoardGameProject
 {
-    public class ComputerPlayer : PlayerBase
+    public class GomokuComputerPlayer : GomokuPlayerBase
     {
         private Random random = new Random();
 
@@ -30,9 +30,5 @@ namespace BoardGameProject
             throw new NotImplementedException();
         }
 
-        public override int GetBoardNum()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

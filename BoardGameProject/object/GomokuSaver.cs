@@ -34,5 +34,10 @@ namespace BoardGameProject
                 Console.WriteLine("Error: save failed!" + e.ToString());
             }
         }
+
+        public void SaveBoardInfo(List<GomokuBoard> boardList, string savePath)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

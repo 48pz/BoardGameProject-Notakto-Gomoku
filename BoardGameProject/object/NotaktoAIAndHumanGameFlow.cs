@@ -1,5 +1,7 @@
 ﻿
 
+using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 
 namespace BoardGameProject
@@ -34,213 +36,253 @@ namespace BoardGameProject
             ui = aUi;
         }
 
-        private PlayerBase player1;
-        private PlayerBase player2;
-        public NotaktoBoard notaktoBoard;
+        private NotaktoPlayerBase player1;
+        private NotaktoPlayerBase player2;
+        public NotaktoBoard notaktoBoard1;
+        public NotaktoBoard notaktoBoard2;
+        public NotaktoBoard notaktoBoard3;
+        public List<NotaktoBoard> boardList;
         private NotaktoChecker checker;
         private NotaktoSaver saver;
         private NotaktoActionManager am;
-        private List<int[,]> boardHistory = new List<int[,]>();
+        private List<List<int[,]>> boardsHistory = new List<List<int[,]>>();
 
         public override void End()
         {
             Console.WriteLine("Game Over... See you next time...");
         }
 
-        private Random random = new Random();
-
-        public override bool SelectPosition(ref int player, out bool isGameOver, ref int round)
-        {
-            isGameOver = false;
-            bool isValid;
-            (int, int) pos;
-            notaktoBoard.CurrentPlayer = player;
-
-            if (player == 1) // AI player
-            {
-                int boardIndex;
-                do
-                {
-                    boardIndex = random.Next(0, notaktoBoard.Count); 
-                } while (notaktoBoard.IsBoardLocked(boardIndex)); 
-
-                notaktoBoard.SwitchBoard(boardIndex); 
-                pos = player1.GetPosition(notaktoBoard); 
-            }
-            else // Human player
-            {
-                int boardIndex;
-                do
-                {
-                    Console.WriteLine("Please select a board number:");
-                    boardIndex = player2.GetBoardNum() - 1; 
-
-                    if (boardIndex < 0 || boardIndex >= notaktoBoard.Count)
-                    {
-                        Console.WriteLine("Error: Invalid board number. Please select a valid board number.");
-                    }
-
-                    else if (notaktoBoard.IsBoardLocked(boardIndex))
-                    {
-                        Console.WriteLine("Error: The selected board is locked. Please choose another board.");
-                    }
-                } while (notaktoBoard.IsBoardLocked(boardIndex)); 
-
-                notaktoBoard.SwitchBoard(boardIndex); 
-                pos = player2.GetPosition();
-            }
-
-            //save
-            if (pos == (999, 999))
-            {
-                string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                saver.SaveBoardInfo(notaktoBoard, baseDir);
-                isGameOver = true;
-                return true;
-            }
-            //load
-            else if (pos == (998, 998))
-            {
-                Console.WriteLine("Please enter the FULL PATH to load the game:");
-
-                try
-                {
-                    while (true)
-                    {
-                        string savePath = Console.ReadLine();
-                        if (string.IsNullOrWhiteSpace(savePath) || !File.Exists(savePath))
-                        {
-                            Console.WriteLine("Error: file does not exist!");
-                            continue;
-                        }
-
-                        string jsonStr = File.ReadAllText(savePath);
-                        if (gameType.Equals(GlobalVar.NOTAKTO))
-                        {
-                            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                            NotaktoBoard board = JsonSerializer.Deserialize<NotaktoBoard>(jsonStr, options);
-
-                            if (board.ValidationStr.Equals(GlobalVar.NOTAKTO))
-                            {
-                                notaktoBoard = board;
-                                Console.WriteLine("\nLoading Successfully!");
-                                notaktoBoard.PrintBoard(round);
-                                return false;
-                            }
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
-            }
-            //undo
-            else if (pos == (997, 997))
-            {
-                while (true)
-                {
-                    Console.WriteLine("Which round do you want to undo to?");
-                    int inputRound;
-                    if (int.TryParse(Console.ReadLine(), out inputRound))
-                    {
-                        if (inputRound > 0 && inputRound < round)
-                        {
-                            if (am.Undo(boardHistory, inputRound, notaktoBoard))
-                            {
-                                int temp = round;
-                                round = inputRound;
-                                //redo
-                                Console.WriteLine("Confirm undo: enter undo to confirm; enter redo to cancel.");
-                                (int, int) confirm = player2.GetPosition();
-                                if (confirm == (996, 996))
-                                {
-                                    am.Redo(notaktoBoard);
-                                    round = temp;
-                                }
-                                break;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Error: enter a number between 1 and {0}", (round - 1));
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
-                        }
-                    }
-                }
-                return true;
-            }
-
-            isValid = checker.IsValidPlace(notaktoBoard, pos.Item1 - 1, pos.Item2 - 1);
-
-            //check validity then place chess
-            if (isValid)//input valid
-            {
-                if (notaktoBoard.PlaceChess(pos.Item1 - 1, pos.Item2 - 1, player))
-                {
-                    //am.RecordMove(new Move(pos.Item1 - 1, pos.Item2 - 1, player));
-                    SaveBoardHistory();
-                    Console.WriteLine($"Player{player} places at {pos.Item1}, {pos.Item2}");
-
-                    
-                    if (checker.IsWin(notaktoBoard, pos.Item1 - 1, pos.Item2 - 1, player))
-                    {
-                        notaktoBoard.LockBoard(notaktoBoard.CurrentBoardIndex); 
-                        Console.WriteLine($"Board {notaktoBoard.CurrentBoardIndex + 1} is now locked.");
-                    }
-                    notaktoBoard.PrintBoard(round);
-
-                    
-                    if (notaktoBoard.AllBoardsLocked())
-                    {
-                        int losingPlayer = player; 
-                        Console.WriteLine("Game End: Player{0} Lost!", losingPlayer);
-                        isGameOver = true;
-                    }
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("Failed to place move");
-
-                }
-                return true;
-            }
-            else //invalid
-            {
-                Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
-                return false;
-            }
-        }
-
         public override void SetUp()
         {
-            notaktoBoard = new NotaktoBoard(); //Use parameterless constructor
-            notaktoBoard.PrintBoard(1);
+            var boards = BoardFactory.CreateBoard(GlobalVar.NOTAKTO);
+            Console.WriteLine("\nRound: {0}", 1);
+            boardList = new List<NotaktoBoard>(3);
+            for (int i = 1; i <= boards.Count; i++)
+            {
+                switch (i)
+                {
+                    case 1:
+                        notaktoBoard1 = boards[i - 1] as NotaktoBoard;
+                        notaktoBoard1.GameMode = gameMode;
+                        boardList.Add(notaktoBoard1);
+                        break;
+                    case 2:
+                        notaktoBoard2 = boards[i - 1] as NotaktoBoard;
+                        notaktoBoard2.GameMode = gameMode;
+                        boardList.Add(notaktoBoard2);
+                        break;
+
+                    case 3:
+                        notaktoBoard3 = boards[i - 1] as NotaktoBoard;
+                        notaktoBoard3.GameMode = gameMode;
+                        boardList.Add(notaktoBoard3);
+                        break;
+                }
+            }
+            foreach (var board in boardList)
+            {
+                board.PrintBoard(1);
+            }
+
             checker = new NotaktoChecker();
-            player1 = PlayerFactory.CreatePlayer(GlobalVar.COMPUTER);
-            player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
+            player1 = NotaktoPlayerFactory.CreatePlayer(GlobalVar.COMPUTER);
+            player2 = NotaktoPlayerFactory.CreatePlayer(GlobalVar.HUMAN);
             Console.WriteLine("\nPlayer1: Computer");
             Console.WriteLine("Player2: Human");
-            notaktoBoard.GameMode = gameMode;
             saver = new NotaktoSaver();
             am = new NotaktoActionManager();
         }
 
-        public void SaveBoardHistory()
+        public override bool SelectPosition(ref int player, out bool isGameOver, ref int round)
         {
-            int[,] currentBoard = new int[notaktoBoard.Size, notaktoBoard.Size];
-            for (int i = 0; i < notaktoBoard.Size; i++)
+            isGameOver = false;
+            foreach (var board in boardList)
             {
-                for (int j = 0; j < notaktoBoard.Size; j++)
+                board.CurrentPlayer = player;
+            }
+            List<int> pos;
+            if (player == 1)
+            {
+                pos = player1.GetPosition(boardList);
+            }
+            else
+            {
+
+                pos = player2.GetPosition();
+
+                Command cmd = (Command)pos[0];
+                //save
+                if (cmd.Equals(Command.save))
                 {
-                    currentBoard[i, j] = notaktoBoard.Boards[notaktoBoard.CurrentBoardIndex][i][j];
+                    string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    saver.SaveBoardInfo(boardList, baseDir);
+                    Console.WriteLine("Game saved successfully.");
+                    isGameOver = true;
+                    return true;
+                }
+                else if (cmd.Equals(Command.load))  // Load
+                {
+                    boardList = saver.LoadGame();
+                    PrintBoardList(boardList[0].Round);
+
+                    return false;
+                }
+                else if (cmd.Equals(Command.undo))
+                {
+                    while (true)
+                    {
+                        Console.WriteLine("Which round do you want to undo to?");
+                        if (int.TryParse(Console.ReadLine(), out int inputRound))
+                        {
+                            if (inputRound > 0 && inputRound < round)
+                            {
+                                boardList = am.Undo(boardsHistory, inputRound-1);
+                                if (boardList == null) continue;
+                                Console.WriteLine($"Undo to round {inputRound} completed.");
+                                PrintBoardList(inputRound);
+                                int temp = round;
+                                round = inputRound;
+                                //redo
+                                Console.WriteLine("Confirm undo: enter undo to confirm; enter redo to cancel.");
+
+                                pos = player2.GetPosition();
+                                Command comfirm = (Command)pos[0];
+                                if (comfirm.Equals(Command.redo))
+                                {
+                                    notaktoBoard1.Round = temp - 1;
+                                    boardList = am.Redo();
+                                    PrintBoardList(notaktoBoard1.Round);
+                                    return false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Please enter the position.");
+                                    round++;
+                                    pos = player2.GetPosition();
+                                }
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Error: enter a number between 1 and {round - 1}.");
+                        }
+                    }
+
+
+
                 }
             }
-            boardHistory.Add(currentBoard);
+
+
+            bool isValid = checker.IsValidPlace(boardList, pos[0] - 1, pos[1] - 1, pos[2] - 1);
+            if (isValid)
+            {
+                if (PlaceChess(boardList, pos, player))
+                {
+                    //update round
+                    boardList[0].Round = round;
+                    SaveBoardHistory();
+                    Console.WriteLine($"Player {player} places at Board number:{pos[0]}, Row:{pos[1]}, Column:{pos[2]}");
+                }
+                else
+                {
+                    Console.WriteLine("Failed to place move.");
+                }
+                //print board
+                for (int i = 1; i <= boardList.Count; i++)
+                {
+                    if (i == 1)
+                    {
+                        Console.WriteLine("\nRound: {0}", round);
+                    }
+                    boardList[i - 1].PrintBoard(round);
+                }
+
+                checker.CheckAndDisableBoards(boardList);
+                if (checker.IsWin(boardList))
+                {
+                    int winner = player == 1 ? 2 : 1;
+                    Console.WriteLine($"Game End: Player {winner} Won!");
+                    isGameOver = true;
+                }
+
+            }
+            else
+            {
+                Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG);
+                return false;
+            }
+            return true;
+
+
+        }
+
+        private void PrintBoardList(int round)
+        {
+            for (int i = 1; i <= boardList.Count; i++)
+            {
+                if (i == 1)
+                {
+                    Console.WriteLine("\nRound: {0}", round);
+                }
+                boardList[i - 1].PrintBoard(round);
+            }
+        }
+
+
+        /// <summary>
+        /// save board history
+        /// </summary>
+        /// <param name="boardList"></param>
+        /// <param name="boardsHistory"></param>
+        private void SaveBoardHistory()
+        {
+            List<int[,]> currentBoardsState = new List<int[,]>();
+
+            foreach (var board in boardList)
+            {
+                int size = board.Size;
+                int[,] boardState = new int[size, size];
+
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        boardState[i, j] = board.Cells[i][j];
+                    }
+                }
+
+                currentBoardsState.Add(boardState);
+            }
+
+            boardsHistory.Add(currentBoardsState);
+        }
+
+
+
+        /// <summary>
+        /// Assign which board to play chess
+        /// </summary>
+        /// <param name="boardList"></param>
+        /// <param name="pos"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public bool PlaceChess(List<NotaktoBoard> boardList, List<int> pos, int player)
+        {
+            int boardIndex = pos[0] - 1;
+            int row = pos[1] - 1;
+            int col = pos[2] - 1;
+
+            if (boardIndex < 0 || boardIndex >= boardList.Count)
+            {
+                Console.WriteLine("Invalid board index.");
+                return false;
+            }
+
+            var selectedBoard = boardList[boardIndex];
+
+            return selectedBoard.PlaceChess(row, col, player);
         }
 
     }

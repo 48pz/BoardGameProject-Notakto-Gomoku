@@ -2,6 +2,7 @@
 
 
 
+
 namespace BoardGameProject
 {
     internal class GomokuChecker : IChecker<GomokuBoard>
@@ -39,6 +40,10 @@ namespace BoardGameProject
             }
         }
 
+        public bool IsValidPlace(List<GomokuBoard> boardList, int boardIndex, int row, int col)
+        {
+            throw new NotImplementedException();
+        }
 
         public bool IsWin(GomokuBoard board, int row, int col, int player)
         {
@@ -53,6 +58,10 @@ namespace BoardGameProject
             }
         }
 
+        public bool IsWin(List<GomokuBoard> boardList)
+        {
+            throw new NotImplementedException();
+        }
 
         private bool CheckDirection(GomokuBoard board, int row, int col, int player, int v1, int v2)
         {

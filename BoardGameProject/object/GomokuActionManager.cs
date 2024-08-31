@@ -4,28 +4,15 @@ namespace BoardGameProject
 {
     public class GomokuActionManager : IActionManager<GomokuBoard>
     {
-        private List<int[,]> history = new List<int[,]>();
         private Stack<int[,]> redoStack = new Stack<int[,]>();
 
 
         public void Clear()
         {
-            history.Clear();
             redoStack.Clear();
         }
 
-        public void SaveBoardState(GomokuBoard board)
-        {
-            int[,] currentState = new int[board.Size, board.Size];
-            for (int i = 0; i < board.Size; i++)
-            {
-                for (int j = 0; j < board.Size; j++)
-                {
-                    currentState[i, j] = board.Cells[i][j];
-                }
-            }
-            history.Add(currentState);
-        }
+
 
         public bool Redo(GomokuBoard board)
         {
@@ -48,6 +35,16 @@ namespace BoardGameProject
                 Console.WriteLine("No moves to redo.");
                 return false;
             }
+        }
+
+        public List<NotaktoBoard> Redo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveBoardState(GomokuBoard board)
+        {
+            throw new NotImplementedException();
         }
 
         public bool Undo(List<int[,]> history, int targetRound, GomokuBoard board)

@@ -1,46 +1,49 @@
 ﻿
 
-
-
-using System.Drawing;
-using System.Text.Json;
-
 namespace BoardGameProject
 {
     public class NotaktoBoard : IBoard
     {
-        private List<List<List<int>>> boards;
-        private int count = 3; // for Notakto
-        private int size = 3;
-        private int currentBoardIndex = 0; // for Notakto
+
+        private List<List<int>> cells;
+        private int size;
         private string gameName = GlobalVar.NOTAKTO;
         private string gameMode;
-        //Used to verify loading file
         private readonly string validationStr = GlobalVar.NOTAKTO;
         private int currentPlayer;
         private int round;
+        private bool isDisable;
 
-        private bool[] isBoardAvailable;
+        public bool IsDisable
+        {
+            get { return isDisable; }
+            set { isDisable = value; }
+        }
 
         public int Round
         {
             get { return round; }
             set { round = value; }
         }
+
+
         public int CurrentPlayer
         {
             get { return currentPlayer; }
             set { currentPlayer = value; }
         }
+
         public string ValidationStr
         {
             get { return validationStr; }
         }
+
         public string GameName
         {
             get { return gameName; }
             set { gameName = value; }
         }
+
         public string GameMode
         {
             get { return gameMode; }
@@ -49,166 +52,96 @@ namespace BoardGameProject
 
         public int Size
         {
-            get { return size; }
+            get { return cells.Count; }
+            set { size = value; }
         }
-        public int Count
-        {
-            get { return count; }
-        }
-        public int CurrentBoardIndex
-        {
-            get { return currentBoardIndex; }
-        }
-        public List<List<List<int>>> Boards
-        {
-            get { return boards; }
-        }
+
         public List<List<int>> Cells
         {
-            get { return boards[currentBoardIndex]; }
+            get { return cells; }
+            set { cells = value; }
         }
 
-        public NotaktoBoard()
+        public NotaktoBoard(int size)
         {
-            boards = new List<List<List<int>>>(count);
-            isBoardAvailable = new bool[count];
+            this.size = size;
+            cells = new List<List<int>>(size);
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < size; i++)
             {
-                isBoardAvailable[i] = true;
-                var board = new List<List<int>>(size);
+                cells.Add(new List<int>(new int[size]));
+            }
+            InitialiseBoard();
+        }
+
+        /// <summary>
+        /// initail board info
+        /// </summary>
+        private void InitialiseBoard()
+        {
+            for (int i = 0; i < size; i++)
+            {
                 for (int j = 0; j < size; j++)
                 {
-                    board.Add(new List<int>(new int[size]));
-                }
-                boards.Add(board);
-            }
-            InitialiseBoards();
-        }
-
-        private void InitialiseBoards()
-        {
-            for (int b = 0; b < count; b++)
-            {
-                for (int i = 0; i < size; i++)
-                {
-                    for (int j = 0; j < size; j++)
-                    {
-                        boards[b][i][j] = 0;
-                    }
+                    cells[i][j] = 0;
                 }
             }
         }
 
+        /// <summary>
+        /// print board 
+        /// </summary>
         public void PrintBoard(int round)
         {
-            Console.WriteLine("\nRound: {0}", round);
-            for (int b = 0; b < count; b++) // for display Notakto 3 boards
+            for (int i = 0; i < size; i++)
             {
-                Console.WriteLine("Board {0}:", b + 1);
-                for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
                 {
-                    for (int j = 0; j < size; j++)
-                    {
-                        char symbol = boards[b][i][j] == 0 ? '.' : 'X';
-                        Console.Write($"{symbol} ");
-                    }
-                    Console.WriteLine();
+                    char symbol = cells[i][j] == 0 ? '.' : 'X';
+                    Console.Write($"{symbol} ");
                 }
                 Console.WriteLine();
             }
             Console.WriteLine();
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public bool PlaceChess(int row, int col, int player)
+        {
+            // Check if cell is empty
+            if (cells[row][col] == 0)
+            {
+                // player 1 = 1 ,player 2 = 2
+                cells[row][col] = player;
+                return true;
+            }
+            return false;
         }
 
         public List<(int, int)> GetAvaliablePositions()
         {
-            List<(int, int)> abaliablePos = new List<(int, int)>();
-            for (int i = 0; i < size; i++)
+            List<(int, int)> emptyPositions = new List<(int, int)>();
+
+            for (int row = 0; row < size; row++)
             {
-                for (int j = 0; j < size; j++)
+                for (int col = 0; col < size; col++)
                 {
-                    if (boards[currentBoardIndex][i][j] == 0)
+                    if (cells[row][col] == 0)
                     {
-                        abaliablePos.Add((i, j));
+                        emptyPositions.Add((row, col));
                     }
                 }
             }
-            return abaliablePos;
-        }
 
-        public bool PlaceChess(int row, int col, int player)
-        {
-            
-            if (row < 0 || row >= size || col < 0 || col >= size)
-            {
-                Console.WriteLine("Error: Move is out of bounds.");
-                return false;
-            }
-
-            
-            if (isBoardAvailable[currentBoardIndex] && boards[currentBoardIndex][row][col] == 0)
-            {
-                boards[currentBoardIndex][row][col] = player;
-
-                if (CheckWinOnBoard(currentBoardIndex))
-                {
-                    isBoardAvailable[currentBoardIndex] = false; 
-                    Console.WriteLine($"Board {currentBoardIndex + 1} is now locked.");
-                    return true;
-                }
-                return true;
-            }
-            Console.WriteLine("Error: Invalid move. The position is already occupied or the board is locked.");
-            return false;
+            return emptyPositions;
         }
-        private bool CheckWinOnBoard(int boardIndex)
-        {
-            var board = boards[boardIndex];
-            
-            for (int i = 0; i < size; i++)
-            {
-                if (board[i][0] != 0 && board[i][0] == board[i][1] && board[i][1] == board[i][2])
-                    return true;
-                if (board[0][i] != 0 && board[0][i] == board[1][i] && board[1][i] == board[2][i])
-                    return true;
-            }
-            if (board[0][0] != 0 && board[0][0] == board[1][1] && board[1][1] == board[2][2])
-                return true;
-            if (board[0][2] != 0 && board[0][2] == board[1][1] && board[1][1] == board[2][0])
-                return true;
-
-            return false;
-        }
-
-        /// <summary>
-        /// Switch to the specified chessboard
-        /// <param name="index"></param>
-        public void SwitchBoard(int index)
-        {
-            if (index >= 0 && index < count)
-            {
-                currentBoardIndex = index;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException("Invalid board index.");
-            }
-        }
-
-        public void LockBoard(int boardIndex)
-        {
-            isBoardAvailable[boardIndex] = false;
-            Console.WriteLine($"Board {boardIndex + 1} is now locked.");
-        }
-        public bool IsBoardLocked(int boardIndex)
-        {
-            return !isBoardAvailable[boardIndex];
-        }
-        public bool AllBoardsLocked()
-        {
-            return !isBoardAvailable.Any(board => board); 
-        }
-
     }
 }
 

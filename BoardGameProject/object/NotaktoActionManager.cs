@@ -4,99 +4,101 @@ namespace BoardGameProject
 {
     public class NotaktoActionManager : IActionManager<NotaktoBoard>
     {
-        private List<List<int[,]>> history = new List<List<int[,]>>();
         private Stack<List<int[,]>> redoStack = new Stack<List<int[,]>>();
-
         public void Clear()
         {
-            history.Clear();
             redoStack.Clear();
-        }
-
-        public void SaveBoardState(NotaktoBoard board)
-        {
-            List<int[,]> currentBoardsState = new List<int[,]>();
-            for (int b = 0; b < board.Size; b++)
-            {
-                int[,] currentState = new int[board.Size, board.Size];
-                for (int i = 0; i < board.Size; i++)
-                {
-                    for (int j = 0; j < board.Size; j++)
-                    {
-                        currentState[i, j] = board.Cells[i][j];
-                    }
-                }
-                currentBoardsState.Add(currentState);
-            }
-            history.Add(currentBoardsState);
         }
 
         public bool Redo(NotaktoBoard board)
         {
-            if (redoStack.Count > 0)
+            throw new NotImplementedException();
+        }
+
+        public void SaveBoardState(NotaktoBoard board)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<NotaktoBoard> Redo()
+        {
+            if (redoStack.Count == 0)
             {
-                List<int[,]> redoState = redoStack.Pop();
-                for (int b = 0; b < redoState.Count; b++)
+                Console.WriteLine("Error: No moves to redo.");
+                return null;
+            }
+
+            List<int[,]> boardState = redoStack.Pop();
+            List<NotaktoBoard> boards = new List<NotaktoBoard>();
+
+            foreach (var state in boardState)
+            {
+                NotaktoBoard board = new NotaktoBoard(state.GetLength(0));
+
+                for (int i = 0; i < state.GetLength(0); i++)
                 {
-                    for (int i = 0; i < board.Size; i++)
+                    for (int j = 0; j < state.GetLength(1); j++)
                     {
-                        for (int j = 0; j < board.Size; j++)
-                        {
-                            board.Boards[b][i][j] = redoState[b][i, j];
-                        }
+                        board.Cells[i][j] = state[i, j];
                     }
                 }
-                Console.WriteLine("Redo completed");
-                board.PrintBoard(history.Count);
-                return true;
+
+                boards.Add(board);
             }
-            else
-            {
-                Console.WriteLine("No moves to redo.");
-                return false;
-            }
+
+            return boards;
         }
+
+        /// <summary>
+        /// undo function
+        /// </summary>
+        /// <param name="boardsHistory"></param>
+        /// <param name="targetRound"></param>
+        /// <returns></returns>
+        public List<NotaktoBoard> Undo(List<List<int[,]>> boardsHistory, int targetRound)
+        {
+            if (targetRound < 0 || targetRound >= boardsHistory.Count)
+            {
+                Console.WriteLine("Error: Invalid round number.");
+                return null;
+            }
+
+            List<int[,]> targetBoardState = boardsHistory[targetRound];
+            List<NotaktoBoard> boards = new List<NotaktoBoard>();
+
+            List<int[,]> currentBoardState = new List<int[,]>();
+            foreach (var board in boardsHistory[boardsHistory.Count - 1]) // 获取当前最新的棋盘状态
+            {
+                int size = board.GetLength(0);
+                int[,] boardCopy = new int[size, size];
+                Array.Copy(board, boardCopy, board.Length);
+                currentBoardState.Add(boardCopy);
+            }
+            redoStack.Push(currentBoardState);
+
+            foreach (var boardState in targetBoardState)
+            {
+                NotaktoBoard board = new NotaktoBoard(boardState.GetLength(0));
+
+                for (int i = 0; i < boardState.GetLength(0); i++)
+                {
+                    for (int j = 0; j < boardState.GetLength(1); j++)
+                    {
+                        board.Cells[i][j] = boardState[i, j];
+                    }
+                }
+
+                boards.Add(board);
+            }
+
+            return boards;
+        }
+
+
 
         public bool Undo(List<int[,]> history, int targetRound, NotaktoBoard board)
         {
-            if (targetRound > 0 && targetRound < history.Count)
-            {
-                //save current board info
-                List<int[,]> currentBoards = new List<int[,]>();
-                for (int b = 0; b < board.Boards.Count; b++)
-                {
-                    int[,] currentBoard = new int[board.Size, board.Size];
-                    for (int i = 0; i < board.Size; i++)
-                    {
-                        for (int j = 0; j < board.Size; j++)
-                        {
-                            currentBoard[i, j] = board.Boards[b][i][j];
-                        }
-                    }
-                    currentBoards.Add(currentBoard);
-                }
-                redoStack.Push(currentBoards);
-
-                // Restore to the target round state
-                int[,] targetBoard = history[targetRound - 1];
-                for (int i = 0; i < board.Size; i++)
-                {
-                    for (int j = 0; j < board.Size; j++)
-                    {
-                        board.Boards[board.CurrentBoardIndex][i][j] = targetBoard[i, j];
-                    }
-                }
-                Console.WriteLine("Undo to round {0}", targetRound);
-                board.PrintBoard(targetRound);
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("Error: Invalid round number.");
-                return false;
-            }
-
+            throw new NotImplementedException();
         }
-
     }
 }

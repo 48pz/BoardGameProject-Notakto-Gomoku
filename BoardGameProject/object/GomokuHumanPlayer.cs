@@ -2,7 +2,7 @@
 
 namespace BoardGameProject
 {
-    public class HumanPlayer : PlayerBase
+    public class GomokuHumanPlayer : GomokuPlayerBase
     {
         private string _currentInputs;
         public string CurrentInputs
@@ -67,15 +67,15 @@ namespace BoardGameProject
             throw new NotImplementedException();
         }
 
-        public override int GetBoardNum() // for Notakto
-        {
-            int boardIndex;
-            Console.WriteLine("Enter the board number (1-3): ");
-            while (!int.TryParse(Console.ReadLine(), out boardIndex) || boardIndex < 1 || boardIndex > 3)
-            {
-                Console.WriteLine("Invalid board number. Please enter a number between 1 and 3:");
-            }
-            return boardIndex;
-        }
+        //public override int GetBoardNum() // for Notakto
+        //{
+        //    int boardIndex;
+        //    Console.WriteLine("Enter the board number (1-3): ");
+        //    while (!int.TryParse(Console.ReadLine(), out boardIndex) || boardIndex < 1 || boardIndex > 3)
+        //    {
+        //        Console.WriteLine("Invalid board number. Please enter a number between 1 and 3:");
+        //    }
+        //    return boardIndex;
+        //}
     }
 }

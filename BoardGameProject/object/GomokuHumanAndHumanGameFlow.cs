@@ -35,8 +35,8 @@ namespace BoardGameProject
             ui = aUi;
         }
 
-        private PlayerBase player1;
-        private PlayerBase player2;
+        private GomokuPlayerBase player1;
+        private GomokuPlayerBase player2;
         public GomokuBoard gomokuBoard;
         private GomokuChecker checker;
         private GomokuSaver saver;
@@ -216,11 +216,21 @@ namespace BoardGameProject
 
         public override void SetUp()
         {
-            gomokuBoard = new GomokuBoard(10);
+            var boards = BoardFactory.CreateBoard(GlobalVar.GOMOKU);
+            gomokuBoard = boards[0] as GomokuBoard;
+
+            if (gomokuBoard != null)
+            {
+                gomokuBoard.PrintBoard(1);
+            }
+            else
+            {
+                Console.WriteLine("Failed to convert IBoard to GomokuBoard.");
+            }
             gomokuBoard.PrintBoard(1);
             checker = new GomokuChecker();
-            player2 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
-            player1 = PlayerFactory.CreatePlayer(GlobalVar.HUMAN);
+            player2 = GomokuPlayerFactory.CreatePlayer(GlobalVar.HUMAN);
+            player1 = GomokuPlayerFactory.CreatePlayer(GlobalVar.HUMAN);
             Console.WriteLine("\nPlayer1: Human");
             Console.WriteLine("Player2: Human");
             gomokuBoard.GameMode = gameMode;
