@@ -35,6 +35,10 @@
                 {
                     return new List<int> { (int)Command.redo };
                 }
+                else if (inputs.Equals(GlobalVar.HELP))
+                {
+                    return new List<int> { (int)Command.help };
+                }
 
                 string[] pos = inputs.Split(' ');
                 if (pos.Length != 3) { Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG); continue; }

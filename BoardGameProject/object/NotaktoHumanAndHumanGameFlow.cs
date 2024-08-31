@@ -44,6 +44,7 @@
         private NotaktoSaver saver;
         private NotaktoActionManager am;
         private List<List<int[,]>> boardsHistory = new List<List<int[,]>>();
+        private NotaktoManual manual;
 
         /// <summary>
         /// after game over
@@ -87,6 +88,11 @@
                 saver.SaveBoardInfo(boardList, baseDir);
                 Console.WriteLine("Game saved successfully.");
                 return true;
+            }
+            else if (cmd.Equals(Command.help))//help system
+            {
+                manual.DisplayUserManual();
+                return false;
             }
             else if (cmd.Equals(Command.load))  // Load
             {
@@ -292,6 +298,7 @@
             Console.WriteLine("Player2: Human");
             saver = new NotaktoSaver();
             am = new NotaktoActionManager();
+            manual = new NotaktoManual();
 
         }
     }

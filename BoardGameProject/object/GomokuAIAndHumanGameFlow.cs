@@ -44,6 +44,7 @@ namespace BoardGameProject
         private GomokuSaver saver;
         private GomokuActionManager am;
         private List<int[,]> boardHistory = new List<int[,]>();
+        private GomokuManual manual;
 
         /// <summary>
         /// initialisation
@@ -69,6 +70,7 @@ namespace BoardGameProject
             gomokuBoard.GameMode = gameMode;
             saver = new GomokuSaver();
             am = new GomokuActionManager();
+            manual = new GomokuManual();
         }
 
         /// <summary>
@@ -103,7 +105,7 @@ namespace BoardGameProject
             {
                 pos = player2.GetPosition();
 
-                
+
                 if (pos == (999, 999))  // Save
                 {
                     string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -116,6 +118,11 @@ namespace BoardGameProject
                 else if (pos == (998, 998))  // Load
                 {
                     PerformLoadOperation(ref round);
+                    return false;
+                }
+                else if (pos == (995, 995))//help system
+                {
+                    manual.DisplayUserManual();
                     return false;
                 }
                 else if (pos == (997, 997))  // Undo
@@ -160,14 +167,14 @@ namespace BoardGameProject
                 }
             }
 
-            
+
             bool isValid = checker.IsValidPlace(gomokuBoard, pos.Item1 - 1, pos.Item2 - 1);
 
             if (isValid)
             {
                 if (gomokuBoard.PlaceChess(pos.Item1 - 1, pos.Item2 - 1, player))
                 {
-                    SaveBoardHistory();  
+                    SaveBoardHistory();
                     Console.WriteLine($"Player {player} places at {pos.Item1}, {pos.Item2}");
                 }
                 else

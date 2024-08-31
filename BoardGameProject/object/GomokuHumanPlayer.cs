@@ -43,6 +43,10 @@ namespace BoardGameProject
                     return (996, 996);
 
                 }
+                else if (inputs.Equals(GlobalVar.HELP))
+                {
+                    return (995, 995);
+                }
 
                 string[] pos = inputs.Split(' ');
                 if (pos.Length != 2) { Console.WriteLine(GlobalVar.USERINPUTSINVALIDMSG); continue; }

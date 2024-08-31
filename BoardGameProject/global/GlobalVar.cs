@@ -18,6 +18,7 @@ namespace BoardGameProject
         public const string LOAD = "load";
         public const string UNDO = "undo";
         public const string REDO = "redo";
+        public const string HELP = "help";
 
     }
 }

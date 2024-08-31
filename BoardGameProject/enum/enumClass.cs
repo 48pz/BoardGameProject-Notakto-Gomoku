@@ -13,11 +13,15 @@ namespace BoardGameProject
         ComputerVSHuman = 2
     }
 
+    /// <summary>
+    /// Operation Enumeration Class
+    /// </summary>
     public enum Command
     {
         save = 999,
         load = 998,
         undo = 997,
         redo = 996,
+        help = 995
     }
 }

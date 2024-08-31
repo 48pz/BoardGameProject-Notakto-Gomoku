@@ -45,6 +45,7 @@ namespace BoardGameProject
         private GomokuSaver saver;
         private GomokuActionManager am;
         private List<int[,]> boardHistory = new List<int[,]>();
+        private GomokuManual manual;
 
         /// <summary>
         /// after game over
@@ -86,6 +87,11 @@ namespace BoardGameProject
                 saver.SaveBoardInfo(gomokuBoard, baseDir);
 
                 return true;
+            }
+            else if (pos == (995, 995))//help system
+            {
+                manual.DisplayUserManual();
+                return false;
             }
             //load
             else if (pos == (998, 998))
@@ -254,6 +260,7 @@ namespace BoardGameProject
             gomokuBoard.GameMode = gameMode;
             saver = new GomokuSaver();
             am = new GomokuActionManager();
+            manual = new GomokuManual();
         }
 
         /// <summary>
